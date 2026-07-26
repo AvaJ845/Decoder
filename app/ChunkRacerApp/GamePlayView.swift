@@ -7,6 +7,7 @@ struct GamePlayView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @StateObject private var model: GameModel
     @State private var showSettings = false
+    @State private var showRecap = false   // grown-up session stats, off by default
 
     init(pack: ContentPack, profileStore: ProfileStore = InMemoryProfileStore()) {
         _model = StateObject(wrappedValue: GameModel(pack: pack, profileStore: profileStore))
@@ -215,12 +216,26 @@ struct GamePlayView: View {
             Text("Race complete!")
                 .font(model.fontManager.display(size: 32, weight: .heavy))
                 .foregroundStyle(tealText)
-            Text("\(model.solved) words cleared")
+            // Celebratory framing only — the child's screen is a win, never a scorecard.
+            Text("You cleared \(model.solved) words!")
                 .font(model.fontManager.reading(size: 17, weight: .medium))
                 .readingSpacing(for: model.learner)
                 .foregroundStyle(ink.opacity(0.7))
+            // Session stats are for the observing adult, NOT a grade for the kid
+            // (no-shame, non-negotiable #1; playtest-1-plan §7). Off by default, behind
+            // a grown-up-labeled disclosure. A real parent gate lands with the parent
+            // dashboard; this keeps accuracy/miss counts off the child's celebration.
             if let summary = model.sessionSummary {
-                SessionSummaryView(summary: summary, scheme: scheme, fontManager: model.fontManager, learner: model.learner)
+                DisclosureGroup(isExpanded: $showRecap) {
+                    SessionSummaryView(summary: summary, scheme: scheme, fontManager: model.fontManager, learner: model.learner)
+                        .padding(.top, 8)
+                } label: {
+                    Label("For grown-ups", systemImage: "person.fill")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(ink.opacity(0.45))
+                }
+                .tint(ink.opacity(0.45))
+                .padding(.top, 6)
             }
         }
         .padding(.top, 60)
