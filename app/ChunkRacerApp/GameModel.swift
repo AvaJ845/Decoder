@@ -25,10 +25,17 @@ final class GameModel: ObservableObject {
     @Published var choices: [String] = []
     @Published var feedback: Feedback?
     @Published var solved = 0
+    @Published var misses = 0          // re-serves this session (for the playtest summary)
     @Published var burstToken = 0
     @Published var arlo: ArloState = .idle
     @Published var arloLine = "Find the chunk!"
     @Published var momentum: ForgivingMomentum
+
+    /// First-try accuracy for the session summary: correct taps over total taps.
+    var accuracyPercent: Int {
+        let attempts = solved + misses
+        return attempts == 0 ? 100 : Int((Double(solved) / Double(attempts) * 100).rounded())
+    }
 
     private var promptTime: Date?
     /// Items answered correctly this session — cleared so the race can actually finish.
@@ -36,29 +43,45 @@ final class GameModel: ObservableObject {
     /// The most recent item, held out of the very next pick so a miss isn't re-served
     /// back-to-back (it still returns later — a gentle re-serve, not an instant drill).
     private var lastAnswered: String?
+    /// Events for this session, kept in memory for the end-of-session summary (playtest §7).
+    private var sessionEvents: [LearningEvent] = []
+    @Published var sessionSummary: SessionSummary?
 
     var total: Int { pack.items.count }
     var progress: Double { total == 0 ? 0 : min(1, Double(solved) / Double(total)) }
 
     convenience init(pack: ContentPack) {
         self.init(pack: pack, profileStore: InMemoryProfileStore(),
-                  engine: SimpleAdaptiveEngine(), events: InMemoryEventStore())
+                  engine: SimpleAdaptiveEngine(), events: nil)
     }
 
     init(pack: ContentPack,
          profileStore: ProfileStore = InMemoryProfileStore(),
          engine: AdaptiveEngine = SimpleAdaptiveEngine(),
-         events: EventStore = InMemoryEventStore()) {
+         events: EventStore? = nil) {
         self.pack = pack
         self.profileStore = profileStore
         self.engine = engine
-        self.events = events
 
         // Load or create a default learner profile before touching self.
         let initialLearner = (try? profileStore.load(id: "demo")) ?? LearnerProfile(displayName: "Player")
         self.learner = initialLearner
         self.fontManager = FontManager(profile: initialLearner)
         self.momentum = initialLearner.momentum
+
+        // Default to a file-backed event store so playtest sessions are reviewable.
+        // Tests and previews can pass an explicit InMemoryEventStore.
+        if let events = events {
+            self.events = events
+        } else {
+            let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?
+                .appendingPathComponent("Decoder/events", isDirectory: true)
+            if let dir = dir, !FileManager.default.fileExists(atPath: dir.path) {
+                try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+            }
+            let url = dir?.appendingPathComponent("\(initialLearner.id).jsonl") ?? URL(fileURLWithPath: "/tmp/events.jsonl")
+            self.events = FileEventStore(url: url)
+        }
 
         present()
     }
@@ -77,8 +100,10 @@ final class GameModel: ObservableObject {
             choices = ([c.payload.correctWord] + c.payload.distractorWords).shuffled()
             arloLine = "Find the chunk!"
             promptTime = Date()
+            sessionSummary = nil
         } else {
             promptTime = nil   // nothing uncleared remains → the race is complete
+            sessionSummary = SessionSummary(events: sessionEvents)
         }
     }
 
@@ -86,8 +111,10 @@ final class GameModel: ObservableObject {
         guard let item = current, feedback == nil else { return }
         let isCorrect = word.lowercased() == item.payload.correctWord.lowercased()
         let latencyMs = promptTime.map { Int(Date().timeIntervalSince($0) * 1000) } ?? 0
-        try? events.append(LearningEvent(learnerId: learner.id, appId: pack.appId,
-                                         itemId: item.itemId, correct: isCorrect, latencyMs: latencyMs))
+        let event = LearningEvent(learnerId: learner.id, appId: pack.appId,
+                                  itemId: item.itemId, correct: isCorrect, latencyMs: latencyMs)
+        try? events.append(event)
+        sessionEvents.append(event)
 
         // Update mastery.
         if learner.skillStates[item.skillId] == nil {
@@ -108,6 +135,7 @@ final class GameModel: ObservableObject {
             arlo = .encourage
             arloLine = "Let's see that one again later"
             momentum.miss()   // forgiving; item stays uncleared → returns later
+            misses += 1
         }
         lastAnswered = item.itemId
 

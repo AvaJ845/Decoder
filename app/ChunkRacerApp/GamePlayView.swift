@@ -7,6 +7,7 @@ struct GamePlayView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @StateObject private var model: GameModel
     @State private var showSettings = false
+    @State private var showRecap = false   // grown-up session stats, off by default
 
     init(pack: ContentPack, profileStore: ProfileStore = InMemoryProfileStore()) {
         _model = StateObject(wrappedValue: GameModel(pack: pack, profileStore: profileStore))
@@ -211,14 +212,31 @@ struct GamePlayView: View {
     }
 
     private var finished: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: 18) {
             Text("Race complete!")
                 .font(model.fontManager.display(size: 32, weight: .heavy))
                 .foregroundStyle(tealText)
-            Text("\(model.solved) words cleared")
+            // Celebratory framing only — the child's screen is a win, never a scorecard.
+            Text("You cleared \(model.solved) words!")
                 .font(model.fontManager.reading(size: 17, weight: .medium))
                 .readingSpacing(for: model.learner)
                 .foregroundStyle(ink.opacity(0.7))
+            // Session stats are for the observing adult, NOT a grade for the kid
+            // (no-shame, non-negotiable #1; playtest-1-plan §7). Off by default, behind
+            // a grown-up-labeled disclosure. A real parent gate lands with the parent
+            // dashboard; this keeps accuracy/miss counts off the child's celebration.
+            if let summary = model.sessionSummary {
+                DisclosureGroup(isExpanded: $showRecap) {
+                    SessionSummaryView(summary: summary, scheme: scheme, fontManager: model.fontManager, learner: model.learner)
+                        .padding(.top, 8)
+                } label: {
+                    Label("For grown-ups", systemImage: "person.fill")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(ink.opacity(0.45))
+                }
+                .tint(ink.opacity(0.45))
+                .padding(.top, 6)
+            }
         }
         .padding(.top, 60)
     }
@@ -346,6 +364,51 @@ private struct Racer: View {
             }
             .padding(.horizontal, 4)
             .offset(y: 12)
+        }
+    }
+}
+
+// MARK: - Session summary (playtest evidence)
+
+private struct SessionSummaryView: View {
+    let summary: SessionSummary
+    let scheme: ColorScheme
+    let fontManager: FontManager
+    let learner: LearnerProfile
+
+    private var ink: Color { Color(hex: scheme == .dark ? DesignTokens.ink.dark : DesignTokens.ink.light) }
+    private var surface: Color { Color(hex: scheme == .dark ? DesignTokens.readingSurface.dark : DesignTokens.readingSurface.light) }
+    private var tealText: Color { Color(hex: scheme == .dark ? DesignTokens.brandTealText.dark : DesignTokens.brandTealText.light) }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("This race")
+                .font(fontManager.display(size: 18, weight: .heavy))
+                .foregroundStyle(tealText)
+            HStack(spacing: 20) {
+                stat(label: "Accuracy", value: "\(Int(summary.accuracy * 100))%")
+                stat(label: "Median time", value: "\(summary.medianLatencyMs)ms")
+                stat(label: "Re-served", value: "\(summary.reservedItemIds.count)")
+            }
+        }
+        .padding(14)
+        .background(surface, in: RoundedRectangle(cornerRadius: 16))
+        .overlay(RoundedRectangle(cornerRadius: 16).stroke(ink.opacity(0.12), lineWidth: 2))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Session summary")
+        .accessibilityValue("Accuracy \(Int(summary.accuracy * 100)) percent, median time \(summary.medianLatencyMs) milliseconds, \(summary.reservedItemIds.count) re-served")
+    }
+
+    private func stat(label: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label)
+                .font(fontManager.reading(size: 12, weight: .medium))
+                .foregroundStyle(ink.opacity(0.6))
+                .readingSpacing(for: learner)
+            Text(value)
+                .font(fontManager.reading(size: 18, weight: .bold))
+                .foregroundStyle(ink)
+                .readingSpacing(for: learner)
         }
     }
 }
