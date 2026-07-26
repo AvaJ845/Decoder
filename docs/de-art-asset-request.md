@@ -91,15 +91,28 @@ Reduce-Motion variant if animated · **AA contrast on all four tints + dark** (r
 never corrective · added to `app/assets/art-bible/ASSET_KEY_MAP.md` · replaces the placeholder
 in `app/ChunkRacerApp/Resources/`.
 
-## 6. Workflow — how to deliver
+## 6. Where the art work goes (critical)
+
+Only one folder is actually compiled into the iOS app. Dropping art anywhere else will *not* make it render.
+
+| What | Where it goes | Bundled into app? |
+|---|---|---|
+| **Shipping assets** (Arlo, kart, icon, feedback, ruler) — named to `assetKey`, with `@1x`/`@2x`/`@3x` | **`app/ChunkRacerApp/Resources/`** | ✅ **Yes — the only bundled folder** |
+| **Fonts** (OpenDyslexic / Lexend / Fredoka `.otf`/`.ttf`) | **`app/ChunkRacerApp/Resources/Fonts/`** | ✅ Yes — auto-loaded by `FontManager` |
+| **Vector masters / working files / concepts** | `app/assets/art-bible/` | ❌ No — source of truth, keeps the bundle lean |
+| **Asset catalog** — add every new key | `app/assets/art-bible/ASSET_KEY_MAP.md` | (doc) |
+
+**Trap to avoid:** `Required DE-Art illustration/` and `app/assets/` are reference folders, not bundled. For an asset to render in the app, the final file must live in `app/ChunkRacerApp/Resources/` and be named to its `assetKey`. The current placeholders work because they are already in that folder.
+
+## 7. Workflow — how to deliver
 
 1. Branch off `main`: **`art/chunk-racer-production`**.
-2. **One PR per asset group** (e.g. "Arlo rigged set", "kart racer", "feedback set") — small
-   PRs review faster than one giant drop.
-3. Fill the PR template; the **Fellow reviews against the DoD + the review bar** and merges.
-4. Never commit the generated `app/ChunkRacer*.xcodeproj/` (it's gitignored).
-5. Answer the kickoff questions in the old brief §112 (animation tool, kart number, etc.) in
-   your first PR description.
+2. Add final assets to `app/ChunkRacerApp/Resources/` (and fonts to `app/ChunkRacerApp/Resources/Fonts/`).
+3. Add masters/concepts to `app/assets/art-bible/` and update `app/assets/art-bible/ASSET_KEY_MAP.md`.
+4. **One PR per asset group** (e.g. "Arlo rigged set", "kart racer", "feedback set") — small PRs review faster than one giant drop.
+5. Fill the PR template; the **Fellow reviews against the DoD + the review bar** and merges.
+6. After adding/removing any Swift file, run `xcodegen generate` in `app/`. Never commit the generated `app/ChunkRacer*.xcodeproj/` (it's gitignored).
+7. Answer the kickoff questions in the old brief §112 (animation tool, kart number, etc.) in your first PR description.
 
 ---
 
