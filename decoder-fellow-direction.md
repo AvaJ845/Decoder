@@ -126,6 +126,12 @@ Five principles the DEs build to, ordered by weight:
 
 Keep these top of mind on every monetization touchpoint; #1 is the lead.
 
+**D17 · 2026-07-26 · Session stats are for the observing adult, never a score shown to the child.**
+Fellow review of the session-summary PR caught a no-shame violation: an accuracy % + miss count on the child's "Race complete" screen is a shame surface (non-negotiable #1; playtest-1-plan §7). Fix merged: the kid sees a celebratory "You cleared N words!"; the `SessionSummary` (computed from the append-only event stream, persisted via `FileEventStore`) sits behind a default-off "For grown-ups" gate. A real parent gate arrives with the parent dashboard. This rule holds for every app: never surface a grade to the child.
+
+**D18 · 2026-07-26 · Chunk Racer is code-complete for Playtest #1; remaining gates are DE-Art + recruiting, not code.**
+The loop is playable and accessible (VoiceOver, Dynamic Type, Reduce Motion, reading ruler, four tints, dark mode, AA-verified) and each session yields evidence. Placeholder art + system fonts are acceptable for the playtest (we test the loop, not the finish). Open items before running it: DE-Art font drop + Tier-1 art (see `docs/de-art-asset-request.md`) and recruiting (see `docs/playtest-1-recruiting-kit.md`). **Open art decision to lock before rigging: Arlo's identity — canonical *book* (art bible) vs the *bear* in `arlo_kart_hero.png`. Fellow leans book; graphics lead's final call.**
+
 ---
 
 ## 5. How I review DE work

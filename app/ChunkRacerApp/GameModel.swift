@@ -25,17 +25,10 @@ final class GameModel: ObservableObject {
     @Published var choices: [String] = []
     @Published var feedback: Feedback?
     @Published var solved = 0
-    @Published var misses = 0          // re-serves this session (for the playtest summary)
     @Published var burstToken = 0
     @Published var arlo: ArloState = .idle
     @Published var arloLine = "Find the chunk!"
     @Published var momentum: ForgivingMomentum
-
-    /// First-try accuracy for the session summary: correct taps over total taps.
-    var accuracyPercent: Int {
-        let attempts = solved + misses
-        return attempts == 0 ? 100 : Int((Double(solved) / Double(attempts) * 100).rounded())
-    }
 
     private var promptTime: Date?
     /// Items answered correctly this session — cleared so the race can actually finish.
@@ -135,7 +128,6 @@ final class GameModel: ObservableObject {
             arlo = .encourage
             arloLine = "Let's see that one again later"
             momentum.miss()   // forgiving; item stays uncleared → returns later
-            misses += 1
         }
         lastAnswered = item.itemId
 
