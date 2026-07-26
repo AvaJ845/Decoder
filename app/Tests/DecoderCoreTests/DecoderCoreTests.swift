@@ -231,4 +231,28 @@ final class DecoderCoreTests: XCTestCase {
         m.miss()
         XCTAssertEqual(m.streak, 3)
     }
+
+    // MARK: - Session summary (playtest evidence)
+
+    func testSessionSummaryAccuracyAndLatency() {
+        let events = [
+            LearningEvent(learnerId: "l1", appId: "chunk-racer", itemId: "a", correct: true, latencyMs: 800),
+            LearningEvent(learnerId: "l1", appId: "chunk-racer", itemId: "b", correct: false, latencyMs: 1200),
+            LearningEvent(learnerId: "l1", appId: "chunk-racer", itemId: "c", correct: true, latencyMs: 600)
+        ]
+        let summary = SessionSummary(events: events)
+        XCTAssertEqual(summary.totalAnswers, 3)
+        XCTAssertEqual(summary.correctAnswers, 2)
+        XCTAssertEqual(summary.accuracy, 2.0 / 3.0, accuracy: 0.001)
+        XCTAssertEqual(summary.medianLatencyMs, 800)
+        XCTAssertEqual(summary.reservedItemIds, ["b"])
+    }
+
+    func testSessionSummaryFromEmptyEvents() {
+        let summary = SessionSummary(events: [])
+        XCTAssertEqual(summary.totalAnswers, 0)
+        XCTAssertEqual(summary.accuracy, 0, accuracy: 0.001)
+        XCTAssertEqual(summary.medianLatencyMs, 0)
+        XCTAssertTrue(summary.reservedItemIds.isEmpty)
+    }
 }

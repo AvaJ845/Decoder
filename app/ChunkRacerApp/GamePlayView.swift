@@ -211,7 +211,7 @@ struct GamePlayView: View {
     }
 
     private var finished: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: 18) {
             Text("Race complete!")
                 .font(model.fontManager.display(size: 32, weight: .heavy))
                 .foregroundStyle(tealText)
@@ -219,6 +219,9 @@ struct GamePlayView: View {
                 .font(model.fontManager.reading(size: 17, weight: .medium))
                 .readingSpacing(for: model.learner)
                 .foregroundStyle(ink.opacity(0.7))
+            if let summary = model.sessionSummary {
+                SessionSummaryView(summary: summary, scheme: scheme, fontManager: model.fontManager, learner: model.learner)
+            }
         }
         .padding(.top, 60)
     }
@@ -346,6 +349,51 @@ private struct Racer: View {
             }
             .padding(.horizontal, 4)
             .offset(y: 12)
+        }
+    }
+}
+
+// MARK: - Session summary (playtest evidence)
+
+private struct SessionSummaryView: View {
+    let summary: SessionSummary
+    let scheme: ColorScheme
+    let fontManager: FontManager
+    let learner: LearnerProfile
+
+    private var ink: Color { Color(hex: scheme == .dark ? DesignTokens.ink.dark : DesignTokens.ink.light) }
+    private var surface: Color { Color(hex: scheme == .dark ? DesignTokens.readingSurface.dark : DesignTokens.readingSurface.light) }
+    private var tealText: Color { Color(hex: scheme == .dark ? DesignTokens.brandTealText.dark : DesignTokens.brandTealText.light) }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("This race")
+                .font(fontManager.display(size: 18, weight: .heavy))
+                .foregroundStyle(tealText)
+            HStack(spacing: 20) {
+                stat(label: "Accuracy", value: "\(Int(summary.accuracy * 100))%")
+                stat(label: "Median time", value: "\(summary.medianLatencyMs)ms")
+                stat(label: "Re-served", value: "\(summary.reservedItemIds.count)")
+            }
+        }
+        .padding(14)
+        .background(surface, in: RoundedRectangle(cornerRadius: 16))
+        .overlay(RoundedRectangle(cornerRadius: 16).stroke(ink.opacity(0.12), lineWidth: 2))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Session summary")
+        .accessibilityValue("Accuracy \(Int(summary.accuracy * 100)) percent, median time \(summary.medianLatencyMs) milliseconds, \(summary.reservedItemIds.count) re-served")
+    }
+
+    private func stat(label: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label)
+                .font(fontManager.reading(size: 12, weight: .medium))
+                .foregroundStyle(ink.opacity(0.6))
+                .readingSpacing(for: learner)
+            Text(value)
+                .font(fontManager.reading(size: 18, weight: .bold))
+                .foregroundStyle(ink)
+                .readingSpacing(for: learner)
         }
     }
 }
