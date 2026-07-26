@@ -255,4 +255,38 @@ final class DecoderCoreTests: XCTestCase {
         XCTAssertEqual(summary.medianLatencyMs, 0)
         XCTAssertTrue(summary.reservedItemIds.isEmpty)
     }
+
+    // MARK: - No-shame loop invariants
+    //
+    // These lock the non-negotiable loop behavior at the engine level so it can't
+    // silently regress. The *full* loop policy (immediate re-serve deferral, progress
+    // counting) lives in GameModel (the UI layer) and isn't reachable from `swift test`
+    // — extracting it into a testable DecoderCore service is the recommended follow-up.
+
+    /// Progress advances only by *clearing* an item, and a cleared item is never served
+    /// again — while an unanswered/missed (uncleared) item stays available to return.
+    /// This is the mechanical basis of "a miss re-serves warmly, it doesn't cost you."
+    func testClearedItemsNeverReturnAndMissedItemsRemainAvailable() throws {
+        let pack = try PackLoader.load(from: packURL())
+        let profile = LearnerProfile(displayName: "Test")
+        let engine = SimpleAdaptiveEngine()
+
+        // Model a session where two items were answered correctly (cleared) and the
+        // rest remain — including any that were missed (missed items are NOT cleared).
+        let cleared = Set(pack.items.prefix(2).map(\.itemId))
+        for _ in 0..<20 {
+            guard let next = engine.nextItem(from: pack, excluding: cleared, profile: profile) else {
+                return XCTFail("engine returned nil while uncleared items remain")
+            }
+            XCTAssertFalse(cleared.contains(next.itemId), "a cleared item must never be re-served")
+        }
+    }
+
+    /// Momentum has no "lose" concept: no matter how many misses in a row, the streak
+    /// floors at zero and there is no failure/lives state. Failure is invisible.
+    func testMomentumHasNoLoseState() {
+        var m = ForgivingMomentum()
+        for _ in 0..<10 { m.miss() }          // ten misses in a row
+        XCTAssertGreaterThanOrEqual(m.streak, 0, "streak must never go negative — there is no lose-state")
+    }
 }
