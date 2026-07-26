@@ -1,0 +1,513 @@
+<title>Decoder — Art Bible Quick Reference</title>
+<style>
+  :root {
+    --ground: #F7F4EC;
+    --panel: #FFFDF7;
+    --panel-2: #F0EADB;
+    --ink: #264653;
+    --ink-soft: #5E7480;
+    --line: #E4DDCD;
+    --line-strong: #CFC6B2;
+    --brand: #2A9D8F;
+    --accent: #E76F51;
+    --success: #E9C46A;
+    --reserve: #A8DADC;
+    --reward: #E9C46A;
+    --callout-bg: #264653;
+    --shadow: 0 1px 0 rgba(0,0,0,.04), 0 12px 30px -20px rgba(38,70,83,.4);
+
+    --sans: -apple-system, "SF Pro Text", system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #1A1F23;
+      --panel: #2A3036;
+      --panel-2: #222A2F;
+      --ink: #E7ECEF;
+      --ink-soft: #9DAFB6;
+      --line: #374149;
+      --line-strong: #4A555D;
+      --brand: #4ECDC4;
+      --accent: #F4A261;
+      --success: #FFD670;
+      --reserve: #6A9E9E;
+      --reward: #FFD670;
+      --callout-bg: #141A1E;
+      --shadow: 0 1px 0 rgba(255,255,255,.03), 0 18px 40px -24px rgba(0,0,0,.8);
+    }
+  }
+  :root[data-theme="light"] {
+    --ground: #F7F4EC; --panel: #FFFDF7; --panel-2: #F0EADB;
+    --ink: #264653; --ink-soft: #5E7480; --line: #E4DDCD; --line-strong: #CFC6B2;
+    --brand: #2A9D8F; --accent: #E76F51; --success: #E9C46A; --reserve: #A8DADC; --reward: #E9C46A;
+    --callout-bg: #264653;
+    --shadow: 0 1px 0 rgba(0,0,0,.04), 0 12px 30px -20px rgba(38,70,83,.4);
+  }
+  :root[data-theme="dark"] {
+    --ground: #1A1F23; --panel: #2A3036; --panel-2: #222A2F;
+    --ink: #E7ECEF; --ink-soft: #9DAFB6; --line: #374149; --line-strong: #4A555D;
+    --brand: #4ECDC4; --accent: #F4A261; --success: #FFD670; --reserve: #6A9E9E; --reward: #FFD670;
+    --callout-bg: #141A1E;
+    --shadow: 0 1px 0 rgba(255,255,255,.03), 0 18px 40px -24px rgba(0,0,0,.8);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .wrap {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    padding: clamp(20px, 4vw, 56px);
+    min-height: 100vh;
+  }
+  .sheet {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  /* Masthead */
+  .masthead {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 16px 24px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 18px;
+  }
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--brand);
+    margin: 0 0 8px;
+  }
+  h1 {
+    font-size: clamp(28px, 4.6vw, 46px);
+    line-height: 1.02;
+    letter-spacing: -.02em;
+    margin: 0;
+    font-weight: 800;
+    text-wrap: balance;
+  }
+  h1 em { font-style: normal; color: var(--accent); }
+  .meta {
+    text-align: right;
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+  .meta .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    padding: 2px 8px;
+  }
+
+  /* North star */
+  .northstar {
+    font-family: var(--serif);
+    font-size: clamp(15px, 1.9vw, 19px);
+    line-height: 1.5;
+    color: var(--ink);
+    border-left: 3px solid var(--accent);
+    padding: 4px 0 4px 18px;
+    margin: 0;
+  }
+  .northstar b { font-weight: 600; color: var(--brand); font-family: var(--sans); }
+
+  /* Grid */
+  .grid { display: grid; gap: 22px; }
+  .cols-2 { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 780px) { .cols-2 { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+    padding: clamp(18px, 2.4vw, 26px);
+  }
+  .panel > h2 {
+    font-size: 12px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .panel > h2::before {
+    content: "";
+    width: 9px; height: 9px;
+    background: var(--accent);
+    border-radius: 2px;
+    flex: none;
+  }
+  .panel .sub {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin: 0 0 18px;
+  }
+
+  /* Non-negotiables strip */
+  .rules {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  @media (max-width: 780px) { .rules { grid-template-columns: repeat(2, 1fr); } }
+  .rule {
+    background: var(--panel-2);
+    padding: 16px 16px 18px;
+  }
+  .rule .n {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .rule .t { font-weight: 700; font-size: 13.5px; margin: 6px 0 3px; }
+  .rule .d { font-size: 12px; color: var(--ink-soft); line-height: 1.45; }
+
+  /* Palette */
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  .pal th {
+    text-align: left;
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 700;
+    padding: 0 10px 10px 0;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .pal td {
+    padding: 11px 10px 11px 0;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+  }
+  .pal tr:last-child td { border-bottom: none; }
+  .swatch {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  .chip {
+    width: 26px; height: 26px;
+    border-radius: 5px;
+    border: 1px solid rgba(0,0,0,.14);
+    flex: none;
+  }
+  .role { font-weight: 700; color: var(--ink); }
+  .note { color: var(--ink-soft); font-size: 12px; }
+  .divider-row td {
+    padding-top: 16px;
+    font-size: 10.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--brand);
+    font-weight: 700;
+  }
+
+  /* Naming */
+  .pattern {
+    font-family: var(--mono);
+    font-size: clamp(15px, 2.2vw, 20px);
+    font-weight: 600;
+    letter-spacing: -.01em;
+    background: var(--panel-2);
+    border: 1px dashed var(--line-strong);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin: 0 0 16px;
+    text-align: center;
+  }
+  .pattern .a { color: var(--brand); }
+  .pattern .o { color: var(--ink); }
+  .pattern .s { color: var(--accent); }
+  .pattern .u { color: var(--ink-soft); }
+  .codes { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 18px; }
+  .code {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 3px 8px;
+    color: var(--ink);
+  }
+  .code b { color: var(--brand); font-weight: 700; }
+  .examples { width: 100%; font-size: 12.5px; }
+  .examples td { padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line); }
+  .examples tr:last-child td { border-bottom: none; }
+  .examples .k { font-family: var(--mono); color: var(--ink); font-size: 11.5px; }
+  .examples .lbl { color: var(--ink-soft); }
+
+  /* DoD checklist */
+  .dod { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+  .dod li {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 11px;
+    align-items: start;
+    font-size: 13px;
+  }
+  .dod li .box {
+    width: 17px; height: 17px;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 4px;
+    margin-top: 2px;
+  }
+  .dod li b { font-weight: 700; }
+  .dod li span { color: var(--ink-soft); }
+
+  /* Feedback callout */
+  .callout {
+    background: var(--callout-bg);
+    color: #fff;
+    border-radius: 6px;
+    padding: clamp(20px, 2.6vw, 28px);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: center;
+    box-shadow: var(--shadow);
+  }
+  @media (max-width: 640px) { .callout { grid-template-columns: 1fr; } }
+  .callout .badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,.4);
+    border-radius: 999px;
+    padding: 6px 14px;
+    white-space: nowrap;
+    align-self: start;
+  }
+  .callout h3 {
+    margin: 0 0 6px;
+    font-size: clamp(17px, 2.4vw, 21px);
+    letter-spacing: -.01em;
+  }
+  .callout p { margin: 0; font-size: 13.5px; line-height: 1.55; color: rgba(255,255,255,.9); }
+  .callout .no {
+    font-family: var(--mono);
+    color: #FFD9A3;
+    font-weight: 600;
+  }
+
+  .foot {
+    font-family: var(--serif);
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    text-align: center;
+    font-style: italic;
+    padding-top: 4px;
+  }
+
+  a:focus-visible, li:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  @media print {
+    .wrap { background: #fff; padding: 0; }
+    .panel, .callout { box-shadow: none; }
+  }
+</style>
+
+<div class="wrap">
+  <div class="sheet">
+
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">Art Bible · Quick Reference</p>
+        <h1>Decoder — the rules that ship on <em>every</em> asset</h1>
+      </div>
+      <div class="meta">
+        <span class="tag">v0.1</span><br>
+        Flagship: <b style="color:var(--brand)">Chunk Racer</b><br>
+        Pin above the desk · full spec: decoder-art-bible.md
+      </div>
+    </header>
+
+    <p class="northstar">
+      A 6-year-old finds it <b>warm</b>. A 10-year-old finds it <b>cool</b>. A parent finds it <b>trustworthy</b>.
+      A dyslexic or ADHD kid <b>never feels remediated</b>. Fail any one — it's not done.
+    </p>
+
+    <!-- Non-negotiables -->
+    <section class="rules" aria-label="Non-negotiables">
+      <div class="rule">
+        <div class="n">01</div>
+        <div class="t">Color ≠ meaning</div>
+        <div class="d">Never signal a game state by color alone. Pair with shape, icon, position, or motion.</div>
+      </div>
+      <div class="rule">
+        <div class="n">02</div>
+        <div class="t">Off-white grounds</div>
+        <div class="d">Low-glare, tint-safe backgrounds. Never pure white — it glares for dyslexic readers.</div>
+      </div>
+      <div class="rule">
+        <div class="n">03</div>
+        <div class="t">Vector-first</div>
+        <div class="d">One source scales iPhone → iPad → @3x. This is the rule that keeps iPad cheap.</div>
+      </div>
+      <div class="rule">
+        <div class="n">04</div>
+        <div class="t">No red X, ever</div>
+        <div class="d">There is no "wrong" in Decoder. A miss drifts back warmly — never a buzzer or a frown.</div>
+      </div>
+    </section>
+
+    <div class="grid cols-2">
+
+      <!-- Palette -->
+      <section class="panel">
+        <h2>Master Palette</h2>
+        <p class="sub">Proposed starting values — lock the final set in art-bible §3. Every role validated for AA contrast &amp; color-blind safety.</p>
+        <table class="pal">
+          <thead>
+            <tr><th>Role</th><th>Light</th><th>Dark</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="role">Ground (off-white)</td>
+              <td><span class="swatch"><span class="chip" style="background:#F7F4EC"></span>#F7F4EC</span></td>
+              <td><span class="swatch"><span class="chip" style="background:#1A1F23"></span>#1A1F23</span></td>
+            </tr>
+            <tr>
+              <td class="role">Reading surface</td>
+              <td><span class="swatch"><span class="chip" style="background:#FFFDF7"></span>#FFFDF7</span></td>
+              <td><span class="swatch"><span class="chip" style="background:#2A3036"></span>#2A3036</span></td>
+            </tr>
+            <tr>
+              <td class="role">Ink · slate</td>
+              <td><span class="swatch"><span class="chip" style="background:#264653"></span>#264653</span></td>
+              <td><span class="swatch"><span class="chip" style="background:#CED4DA"></span>#CED4DA</span></td>
+            </tr>
+            <tr>
+              <td class="role">Brand · teal</td>
+              <td><span class="swatch"><span class="chip" style="background:#2A9D8F"></span>#2A9D8F</span></td>
+              <td><span class="swatch"><span class="chip" style="background:#4ECDC4"></span>#4ECDC4</span></td>
+            </tr>
+            <tr>
+              <td class="role">Secondary · coral</td>
+              <td><span class="swatch"><span class="chip" style="background:#E76F51"></span>#E76F51</span></td>
+              <td><span class="swatch"><span class="chip" style="background:#F4A261"></span>#F4A261</span></td>
+            </tr>
+            <tr class="divider-row"><td colspan="3">Semantic — always paired with shape / icon</td></tr>
+            <tr>
+              <td class="role">Reward / success gold</td>
+              <td colspan="2"><span class="swatch"><span class="chip" style="background:#E9C46A"></span>#E9C46A · Kit currency + celebrate — pair with burst / checkmark</span></td>
+            </tr>
+            <tr>
+              <td class="role">Gentle re-serve</td>
+              <td colspan="2"><span class="swatch"><span class="chip" style="background:#A8DADC"></span>#A8DADC · soft blue "try later" — NOT an alarm red</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Naming -->
+      <section class="panel">
+        <h2>Naming = Asset Keys</h2>
+        <p class="sub">Filenames map 1:1 to the content schema. All lowercase, underscores. Agree this before producing anything.</p>
+        <p class="pattern"><span class="a">app</span><span class="u">_</span><span class="o">object</span><span class="u">_</span><span class="s">state</span></p>
+        <div class="codes">
+          <span class="code"><b>forge</b> Sound Forge</span>
+          <span class="code"><b>racer</b> Chunk Racer</span>
+          <span class="code"><b>hunt</b> Clue Hunt</span>
+          <span class="code"><b>dojo</b> Focus Dojo</span>
+          <span class="code"><b>studio</b> Story Studio</span>
+          <span class="code"><b>kit</b> shared</span>
+          <span class="code"><b>ui</b> shared</span>
+          <span class="code"><b>brand</b> identity</span>
+        </div>
+        <table class="examples">
+          <tbody>
+            <tr><td class="k">forge_anvil_idle</td><td class="lbl">Sound Forge anvil, resting</td></tr>
+            <tr><td class="k">racer_chunk_hit</td><td class="lbl">Racer chunk tile, on hit</td></tr>
+            <tr><td class="k">kit_tool_chunking</td><td class="lbl">Decoder Kit chunking tool</td></tr>
+            <tr><td class="k">ui_momentum_protected</td><td class="lbl">Meter, rest-day state</td></tr>
+            <tr><td class="k">kit_guide_arlo_celebrate</td><td class="lbl">Guide character celebrating</td></tr>
+            <tr><td class="k">ui_button_primary_dark</td><td class="lbl">Primary button, dark mode</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+
+    <div class="grid cols-2">
+      <!-- DoD -->
+      <section class="panel">
+        <h2>Definition of Done</h2>
+        <p class="sub">An asset ships only when every box is true.</p>
+        <ul class="dod">
+          <li><span class="box"></span><span><b>Vector-first</b> — or authored at largest target + @1x/@2x/@3x if raster</span></li>
+          <li><span class="box"></span><span><b>Named to its key</b> — <span style="font-family:var(--mono);font-size:11.5px">app_object_state</span></span></li>
+          <li><span class="box"></span><span><b>Transparent background</b> — sits on any user tint</span></li>
+          <li><span class="box"></span><span><b>Layered / rig-ready</b> if it animates — never flattened</span></li>
+          <li><span class="box"></span><span><b>Light and dark</b> variants, both designed</span></li>
+          <li><span class="box"></span><span><b>Reduce-Motion</b> variant if animated</span></li>
+          <li><span class="box"></span><span><b>Contrast AA</b>; no meaning carried by color alone</span></li>
+          <li><span class="box"></span><span><b>Clean on all four tints</b> — cream / blue / grey / off-white</span></li>
+          <li><span class="box"></span><span><b>Reads at smallest size</b> — icons legible at 60&nbsp;px</span></li>
+          <li><span class="box"></span><span><b>Tone check</b> — warm, never babyish, never corrective</span></li>
+          <li><span class="box"></span><span><b>Exists in the schema</b> — no orphan art, no missing art</span></li>
+        </ul>
+      </section>
+
+      <!-- Type roles + feedback -->
+      <section class="panel">
+        <h2>Two Type Roles — Never Bleed</h2>
+        <p class="sub">Keep the reading surface sacred: never style, texture, or animate it.</p>
+        <div style="display:grid;gap:14px;margin-bottom:20px">
+          <div style="border:1px solid var(--line);border-radius:6px;padding:14px 16px;background:var(--panel-2)">
+            <div style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px">Display / brand</div>
+            <div style="font-family:var(--sans);font-weight:800;font-size:24px;letter-spacing:-.02em">Forge a word.</div>
+            <div class="note" style="margin-top:4px">Characterful. Titles, buttons, celebrations. May be styled &amp; animated.</div>
+          </div>
+          <div style="border:1px solid var(--line);border-radius:6px;padding:14px 16px;background:var(--panel-2)">
+            <div style="font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);font-weight:700;margin-bottom:6px">Reading type</div>
+            <div style="font-family:var(--serif);font-size:19px;line-height:1.5">The fox ran to the den to hide.</div>
+            <div class="note" style="margin-top:6px">Max legibility. Adjustable spacing &amp; line-height. Never decorated.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Feedback callout -->
+    <section class="callout">
+      <span class="badge">Tone-defining set</span>
+      <div>
+        <h3>Failure is invisible</h3>
+        <p>
+          Shame is the #1 reason these kids quit. A miss simply drifts back for later — the guide stays encouraging.
+          <span class="no">No red X. No buzzer. No frown.</span> And the momentum meter has a protected rest-day state, so one bad day never resets progress. Get this system right and the whole product's tone works.
+        </p>
+      </div>
+    </section>
+
+    <p class="foot">Warmth in the characters · calm in the composition · dignity on the reading surface · vector everywhere.</p>
+
+  </div>
+</div>

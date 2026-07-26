@@ -1,0 +1,296 @@
+{
+  "id": "chunk-racer-basics-1",
+  "version": "1.1.0",
+  "appId": "chunk-racer",
+  "locale": "en-US",
+  "skillIds": [
+    "decode-cvc",
+    "decode-digraphs-blends",
+    "sight-words-short",
+    "multisyllable-chunking",
+    "fluency-target-wpm"
+  ],
+  "alignment": {
+    "framework": "Structured Literacy / Orton-Gillingham",
+    "strand": "Decoding & Fluency",
+    "level": "Early Elementary (K–2)"
+  },
+  "items": [
+    {
+      "itemId": "cr-001",
+      "skillId": "decode-cvc",
+      "difficultyBand": 1,
+      "payload": {
+        "targetChunk": "at",
+        "correctWord": "cat",
+        "distractorWords": ["dog", "sun"],
+        "hint": "Which word ends with the sound /at/?"
+      },
+      "assetKeys": [
+        "racer_chunk_at",
+        "racer_word_cat",
+        "racer_word_dog",
+        "racer_word_sun",
+        "racer_audio_cat",
+        "racer_audio_chunk_at"
+      ],
+      "cues": [
+        { "emphasis": "medium", "type": "snap" }
+      ],
+      "minCanvas": "compact"
+    },
+    {
+      "itemId": "cr-002",
+      "skillId": "decode-cvc",
+      "difficultyBand": 1,
+      "payload": {
+        "targetChunk": "og",
+        "correctWord": "dog",
+        "distractorWords": ["cat", "sun"],
+        "hint": "Which word rhymes with log?"
+      },
+      "assetKeys": [
+        "racer_chunk_og",
+        "racer_word_dog",
+        "racer_word_cat",
+        "racer_word_sun",
+        "racer_audio_dog",
+        "racer_audio_chunk_og"
+      ],
+      "cues": [
+        { "emphasis": "medium", "type": "snap" }
+      ],
+      "minCanvas": "compact"
+    },
+    {
+      "itemId": "cr-003",
+      "skillId": "decode-cvc",
+      "difficultyBand": 1,
+      "payload": {
+        "targetChunk": "un",
+        "correctWord": "sun",
+        "distractorWords": ["cat", "dog"],
+        "hint": "Which word has the /u/ sound in the middle?"
+      },
+      "assetKeys": [
+        "racer_chunk_un",
+        "racer_word_sun",
+        "racer_word_cat",
+        "racer_word_dog",
+        "racer_audio_sun",
+        "racer_audio_chunk_un"
+      ],
+      "cues": [
+        { "emphasis": "medium", "type": "snap" }
+      ],
+      "minCanvas": "compact"
+    },
+    {
+      "itemId": "cr-004",
+      "skillId": "decode-cvc",
+      "difficultyBand": 2,
+      "payload": {
+        "targetChunk": "ish",
+        "correctWord": "fish",
+        "distractorWords": ["ship", "frog"],
+        "hint": "The letters 'sh' make one sound at the end."
+      },
+      "assetKeys": [
+        "racer_chunk_ish",
+        "racer_word_fish",
+        "racer_word_ship",
+        "racer_word_frog",
+        "racer_audio_fish",
+        "racer_audio_chunk_ish"
+      ],
+      "cues": [
+        { "emphasis": "medium", "type": "snap" }
+      ],
+      "minCanvas": "compact"
+    },
+    {
+      "itemId": "cr-005",
+      "skillId": "decode-digraphs-blends",
+      "difficultyBand": 2,
+      "payload": {
+        "targetChunk": "ip",
+        "correctWord": "ship",
+        "distractorWords": ["fish", "frog"],
+        "hint": "Which word ends with /ip/?"
+      },
+      "assetKeys": [
+        "racer_chunk_ip",
+        "racer_word_ship",
+        "racer_word_fish",
+        "racer_word_frog",
+        "racer_audio_ship",
+        "racer_audio_chunk_ip"
+      ],
+      "cues": [
+        { "emphasis": "medium", "type": "snap" }
+      ],
+      "minCanvas": "compact"
+    },
+    {
+      "itemId": "cr-006",
+      "skillId": "decode-digraphs-blends",
+      "difficultyBand": 3,
+      "payload": {
+        "targetChunk": "og",
+        "correctWord": "frog",
+        "distractorWords": ["ship", "fish"],
+        "hint": "Blend 'fr' then find the /og/ ending."
+      },
+      "assetKeys": [
+        "racer_chunk_og",
+        "racer_word_frog",
+        "racer_word_ship",
+        "racer_word_fish",
+        "racer_audio_frog",
+        "racer_audio_chunk_og"
+      ],
+      "cues": [
+        { "emphasis": "strong", "type": "snap" }
+      ],
+      "minCanvas": "compact"
+    },
+    {
+      "itemId": "cr-007",
+      "skillId": "sight-words-short",
+      "difficultyBand": 3,
+      "payload": {
+        "targetChunk": "the",
+        "correctWord": "the",
+        "distractorWords": ["and", "sun"],
+        "hint": "A sight word you can read in a snap."
+      },
+      "assetKeys": [
+        "racer_chunk_the",
+        "racer_word_the",
+        "racer_word_and",
+        "racer_word_sun",
+        "racer_audio_the",
+        "racer_audio_chunk_the"
+      ],
+      "cues": [
+        { "emphasis": "medium", "type": "pulse" }
+      ],
+      "minCanvas": "compact"
+    },
+    {
+      "itemId": "cr-008",
+      "skillId": "sight-words-short",
+      "difficultyBand": 3,
+      "payload": {
+        "targetChunk": "and",
+        "correctWord": "and",
+        "distractorWords": ["the", "fish"],
+        "hint": "A common little word."
+      },
+      "assetKeys": [
+        "racer_chunk_and",
+        "racer_word_and",
+        "racer_word_the",
+        "racer_word_fish",
+        "racer_audio_and",
+        "racer_audio_chunk_and"
+      ],
+      "cues": [
+        { "emphasis": "medium", "type": "pulse" }
+      ],
+      "minCanvas": "compact"
+    },
+    {
+      "itemId": "cr-009",
+      "skillId": "multisyllable-chunking",
+      "difficultyBand": 4,
+      "payload": {
+        "targetChunk": "rab",
+        "correctWord": "rabbit",
+        "distractorWords": ["butter", "frog"],
+        "hint": "Break it into two parts: rab-bit."
+      },
+      "assetKeys": [
+        "racer_chunk_rab",
+        "racer_word_rabbit",
+        "racer_word_butter",
+        "racer_word_frog",
+        "racer_audio_rabbit",
+        "racer_audio_chunk_rab"
+      ],
+      "cues": [
+        { "emphasis": "strong", "type": "bloom" }
+      ],
+      "minCanvas": "regular"
+    },
+    {
+      "itemId": "cr-010",
+      "skillId": "multisyllable-chunking",
+      "difficultyBand": 4,
+      "payload": {
+        "targetChunk": "but",
+        "correctWord": "butter",
+        "distractorWords": ["rabbit", "swimming"],
+        "hint": "The first chunk sounds like 'but'."
+      },
+      "assetKeys": [
+        "racer_chunk_but",
+        "racer_word_butter",
+        "racer_word_rabbit",
+        "racer_word_swimming",
+        "racer_audio_butter",
+        "racer_audio_chunk_but"
+      ],
+      "cues": [
+        { "emphasis": "strong", "type": "bloom" }
+      ],
+      "minCanvas": "regular"
+    },
+    {
+      "itemId": "cr-011",
+      "skillId": "fluency-target-wpm",
+      "difficultyBand": 5,
+      "payload": {
+        "targetChunk": "swim",
+        "correctWord": "swimming",
+        "distractorWords": ["butter", "lunchbox"],
+        "hint": "Look for the root word 'swim' inside."
+      },
+      "assetKeys": [
+        "racer_chunk_swim",
+        "racer_word_swimming",
+        "racer_word_butter",
+        "racer_word_lunchbox",
+        "racer_audio_swimming",
+        "racer_audio_chunk_swim"
+      ],
+      "cues": [
+        { "emphasis": "strong", "type": "drift" }
+      ],
+      "minCanvas": "regular"
+    },
+    {
+      "itemId": "cr-012",
+      "skillId": "fluency-target-wpm",
+      "difficultyBand": 5,
+      "payload": {
+        "targetChunk": "lunch",
+        "correctWord": "lunchbox",
+        "distractorWords": ["swimming", "rabbit"],
+        "hint": "Two words stuck together: lunch + box."
+      },
+      "assetKeys": [
+        "racer_chunk_lunch",
+        "racer_word_lunchbox",
+        "racer_word_swimming",
+        "racer_word_rabbit",
+        "racer_audio_lunchbox",
+        "racer_audio_chunk_lunch"
+      ],
+      "cues": [
+        { "emphasis": "strong", "type": "drift" }
+      ],
+      "minCanvas": "regular"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "title": "Chunk Racer Word Bank — Early Elementary (K–2)",
+  "description": "Organized by difficulty band and reading skill. Each entry includes a target chunk, distractors, and a quick hint for the adaptive engine or parent dashboard.",
+  "locale": "en-US",
+  "bands": [
+    {
+      "band": 1,
+      "skillId": "decode-cvc",
+      "skillName": "Decode CVC words",
+      "criteria": "Short vowel, single-syllable, no blends or digraphs",
+      "items": [
+        { "word": "cat", "chunk": "at", "distractors": ["it", "ot"], "hint": "Middle sound is /a/ like apple." },
+        { "word": "dog", "chunk": "og", "distractors": ["ag", "ig"], "hint": "Rhymes with log." },
+        { "word": "sun", "chunk": "un", "distractors": ["an", "in"], "hint": "Middle sound is /u/ like umbrella." },
+        { "word": "bed", "chunk": "ed", "distractors": ["ad", "id"], "hint": "Middle sound is /e/ like egg." },
+        { "word": "pig", "chunk": "ig", "distractors": ["ag", "eg"], "hint": "Middle sound is /i/ like igloo." },
+        { "word": "mop", "chunk": "op", "distractors": ["ip", "ap"], "hint": "Middle sound is /o/ like octopus." },
+        { "word": "run", "chunk": "un", "distractors": ["an", "on"], "hint": "First sound /r/, then /u/." },
+        { "word": "hen", "chunk": "en", "distractors": ["an", "in"], "hint": "Rhymes with pen." },
+        { "word": "bus", "chunk": "us", "distractors": ["as", "is"], "hint": "Ends with /s/ like snake." },
+        { "word": "fox", "chunk": "ox", "distractors": ["ax", "ex"], "hint": "Middle sound is /o/." }
+      ]
+    },
+    {
+      "band": 2,
+      "skillId": "decode-cvc",
+      "skillName": "Decode CVC with blends/digraphs",
+      "criteria": "Single-syllable with one blend or digraph",
+      "items": [
+        { "word": "fish", "chunk": "ish", "distractors": ["ash", "ush"], "hint": "Sh makes one sound." },
+        { "word": "ship", "chunk": "ip", "distractors": ["op", "ap"], "hint": "Start with sh." },
+        { "word": "flag", "chunk": "ag", "distractors": ["ig", "eg"], "hint": "Blend fl together." },
+        { "word": "frog", "chunk": "og", "distractors": ["ig", "ag"], "hint": "Blend fr together." },
+        { "word": "swim", "chunk": "im", "distractors": ["am", "om"], "hint": "Blend sw together." },
+        { "word": "trap", "chunk": "ap", "distractors": ["ip", "op"], "hint": "Blend tr together." },
+        { "word": "stop", "chunk": "op", "distractors": ["ap", "ip"], "hint": "Blend st together." },
+        { "word": "skate", "chunk": "ate", "distractors": ["ite", "ote"], "hint": "Blend sk together." }
+      ]
+    },
+    {
+      "band": 3,
+      "skillId": "sight-words-short",
+      "skillName": "Short sight-word automaticity",
+      "criteria": "High-frequency early words, often not phonetically regular",
+      "items": [
+        { "word": "the", "chunk": "the", "distractors": ["they", "then"], "hint": "A little word you see everywhere." },
+        { "word": "and", "chunk": "and", "distractors": ["end", "ant"], "hint": "Connects two things." },
+        { "word": "is", "chunk": "is", "distractors": ["it", "in"], "hint": "Short word: /iz/." },
+        { "word": "you", "chunk": "you", "distractors": ["your", "yell"], "hint": "Means the person listening." },
+        { "word": "was", "chunk": "was", "distractors": ["saw", "way"], "hint": "Past tense of is." },
+        { "word": "for", "chunk": "for", "distractors": ["far", "fir"], "hint": "Means someone gets something." },
+        { "word": "are", "chunk": "are", "distractors": ["air", "ear"], "hint": "Plural of is." },
+        { "word": "with", "chunk": "with", "distractors": ["wish", "which"], "hint": "Means together." }
+      ]
+    },
+    {
+      "band": 4,
+      "skillId": "multisyllable-chunking",
+      "skillName": "Multisyllable chunking",
+      "criteria": "Two-syllable words with clear chunk boundaries",
+      "items": [
+        { "word": "rabbit", "chunk": "rab", "distractors": ["rib", "rob"], "hint": "rab-bit." },
+        { "word": "butter", "chunk": "but", "distractors": ["bat", "bit"], "hint": "but-ter." },
+        { "word": "napkin", "chunk": "nap", "distractors": ["nip", "nop"], "hint": "nap-kin." },
+        { "word": "picnic", "chunk": "pic", "distractors": ["pac", "pec"], "hint": "pic-nic." },
+        { "word": "sunset", "chunk": "sun", "distractors": ["sin", "son"], "hint": "sun-set." },
+        { "word": "laptop", "chunk": "lap", "distractors": ["lip", "lop"], "hint": "lap-top." },
+        { "word": "dishes", "chunk": "dish", "distractors": ["dash", "desh"], "hint": "dish-es." },
+        { "word": "pencil", "chunk": "pen", "distractors": ["pin", "pan"], "hint": "pen-cil." }
+      ]
+    },
+    {
+      "band": 5,
+      "skillId": "fluency-target-wpm",
+      "skillName": "Fluency at target WPM",
+      "criteria": "Longer words or compound words requiring quick chunk recognition",
+      "items": [
+        { "word": "swimming", "chunk": "swim", "distractors": ["swam", "swim"], "hint": "Find the root word." },
+        { "word": "lunchbox", "chunk": "lunch", "distractors": ["launch", "lunch"], "hint": "lunch + box." },
+        { "word": "backpack", "chunk": "back", "distractors": ["buck", "beak"], "hint": "back + pack." },
+        { "word": "playground", "chunk": "play", "distractors": ["ploy", "plow"], "hint": "play + ground." },
+        { "word": "sunshine", "chunk": "sun", "distractors": ["sin", "son"], "hint": "sun + shine." },
+        { "word": "basketball", "chunk": "basket", "distractors": ["bisket", "bosket"], "hint": "basket + ball." },
+        { "word": "snowflake", "chunk": "snow", "distractors": ["snaw", "snew"], "hint": "snow + flake." },
+        { "word": "spaceship", "chunk": "space", "distractors": ["spice", "spade"], "hint": "space + ship." }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://decoder.app/schemas/skill-graph-v1.json",
+  "title": "Decoder Skill Graph v1 — Chunk Racer Slice",
+  "description": "Directed acyclic graph of reading micro-skills for the Chunk Racer flagship. Nodes carry prerequisites, mastery thresholds, and app mappings.",
+  "version": "1.0.0",
+  "nodes": [
+    {
+      "id": "phonemic-awareness",
+      "name": "Phonemic Awareness",
+      "description": "Hear and manipulate individual sounds in spoken words",
+      "prerequisites": [],
+      "masteryThreshold": 0.85,
+      "apps": ["sound-forge"]
+    },
+    {
+      "id": "letter-sound-correspondence",
+      "name": "Letter–Sound Correspondence",
+      "description": "Map printed letters to their most common sounds",
+      "prerequisites": ["phonemic-awareness"],
+      "masteryThreshold": 0.85,
+      "apps": ["sound-forge", "chunk-racer"]
+    },
+    {
+      "id": "blend-onset-rime",
+      "name": "Blend Onset + Rime",
+      "description": "Combine beginning sound with word-family ending",
+      "prerequisites": ["letter-sound-correspondence"],
+      "masteryThreshold": 0.80,
+      "apps": ["sound-forge", "chunk-racer"]
+    },
+    {
+      "id": "decode-cvc",
+      "name": "Decode CVC Words",
+      "description": "Sound out and blend short vowel consonant-vowel-consonant words",
+      "prerequisites": ["blend-onset-rime"],
+      "masteryThreshold": 0.80,
+      "apps": ["chunk-racer", "sound-forge"]
+    },
+    {
+      "id": "sight-words-short",
+      "name": "Short Sight-Word Automaticity",
+      "description": "Recognize early high-frequency words instantly",
+      "prerequisites": ["decode-cvc"],
+      "masteryThreshold": 0.90,
+      "apps": ["chunk-racer"]
+    },
+    {
+      "id": "decode-digraphs-blends",
+      "name": "Decode Digraphs & Blends",
+      "description": "Read words with consonant blends and digraphs",
+      "prerequisites": ["decode-cvc"],
+      "masteryThreshold": 0.80,
+      "apps": ["chunk-racer", "sound-forge"]
+    },
+    {
+      "id": "multisyllable-chunking",
+      "name": "Multisyllable Chunking",
+      "description": "Break longer words into syllable chunks",
+      "prerequisites": ["decode-digraphs-blends"],
+      "masteryThreshold": 0.75,
+      "apps": ["chunk-racer", "clue-hunt"]
+    },
+    {
+      "id": "fluency-target-wpm",
+      "name": "Fluency at Target WPM",
+      "description": "Read connected chunks with speed and accuracy",
+      "prerequisites": ["sight-words-short", "multisyllable-chunking"],
+      "masteryThreshold": 0.80,
+      "apps": ["chunk-racer"]
+    }
+  ],
+  "tracks": [
+    {
+      "id": "executive-function",
+      "name": "Executive Function Track",
+      "description": "Parallel skills surfaced by Focus Dojo and woven into every session",
+      "nodes": ["initiation", "sustained-attention", "self-monitoring"]
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://decoder.app/schemas/content-pack-v2.1.json",
+  "title": "Decoder Content Pack Schema v2.1",
+  "description": "Versioned, validated content pack for a single Decoder app. Content is platform-neutral; the app resolves assetKeys to @2x/@3x/PDF variants per device (§8.1). v2.1 locks the Chunk Racer mechanic: a target chunk is the prompt and the player picks the streaming word that contains it (targetChunk / correctWord / distractorWords).",
+  "type": "object",
+  "required": ["id", "version", "appId", "locale", "skillIds", "items"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique content pack identifier, e.g. chunk-racer-basics-1"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semantic version of this pack, e.g. 1.0.0"
+    },
+    "appId": {
+      "type": "string",
+      "enum": ["sound-forge", "chunk-racer", "clue-hunt", "focus-dojo", "story-studio"],
+      "description": "Which app this pack belongs to"
+    },
+    "locale": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Locale of the content, e.g. en-US"
+    },
+    "skillIds": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Skill graph nodes practiced by this pack"
+    },
+    "alignment": {
+      "type": "object",
+      "description": "Pedagogical alignment metadata for specialists and parents",
+      "properties": {
+        "framework": { "type": "string" },
+        "strand": { "type": "string" },
+        "level": { "type": "string" }
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/item" },
+      "minItems": 1
+    }
+  },
+  "definitions": {
+    "item": {
+      "type": "object",
+      "required": ["itemId", "skillId", "difficultyBand", "payload"],
+      "properties": {
+        "itemId": { "type": "string" },
+        "skillId": { "type": "string" },
+        "difficultyBand": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "1=easiest, 5=hardest within the skill"
+        },
+        "payload": {
+          "type": "object",
+          "description": "App-specific content. Chunk Racer mechanic (v2.1): the targetChunk is shown as the prompt; the player picks the streaming word that contains it. correctWord contains the chunk; every distractorWord must NOT contain it, guaranteeing exactly one right answer.",
+          "properties": {
+            "targetChunk": {
+              "type": "string",
+              "description": "The chunk prompt shown at the top of the screen, e.g. \"at\""
+            },
+            "correctWord": {
+              "type": "string",
+              "description": "The word that contains the targetChunk, e.g. \"cat\""
+            },
+            "distractorWords": {
+              "type": "array",
+              "items": { "type": "string" },
+              "minItems": 1,
+              "description": "Words that do NOT contain the targetChunk. Exactly one correct answer must exist across correctWord + distractorWords."
+            },
+            "hint": { "type": "string" }
+          },
+          "required": ["targetChunk", "correctWord", "distractorWords"]
+        },
+        "assetKeys": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Logical asset keys (e.g. racer_word_cat). The app resolves these to @2x/@3x/PDF variants per device. No pixel filenames in content."
+        },
+        "cues": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/cue" },
+          "description": "Abstract multisensory cues. The app maps these to Core Haptics on iPhone and audio/visual emphasis elsewhere."
+        },
+        "minCanvas": {
+          "type": "string",
+          "enum": ["compact", "regular", "large"],
+          "description": "Complexity hint for layout. The app decides final layout by size class, not device."
+        },
+        "enhancedInput": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Optional input enrichments (e.g. [\"pencil\"]). Never required; iPhone always has a first-class path."
+        }
+      }
+    },
+    "cue": {
+      "type": "object",
+      "required": ["emphasis", "type"],
+      "properties": {
+        "emphasis": {
+          "type": "string",
+          "enum": ["light", "medium", "strong"],
+          "description": "Intensity of the cue"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["snap", "pulse", "bloom", "drift"],
+          "description": "Type of abstract cue. The app translates to haptic/visual/audio."
+        }
+      }
+    }
+  }
+}

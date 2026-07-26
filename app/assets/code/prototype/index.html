@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Chunk Racer — Decoder Prototype</title>
+  <style>
+    :root {
+      --bg: #f7f4ec;
+      --text: #2a2a2a;
+      --accent: #2d9cdb;
+      --accent-dark: #1a6fa3;
+      --success: #7bc17e;
+      --highlight: #ffde67;
+      --ruler: rgba(45, 156, 219, 0.15);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* Dyslexia-friendly reading ruler behind the lane */
+    .ruler {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 96px;
+      transform: translateY(-50%);
+      background: var(--ruler);
+      border-top: 2px solid var(--accent);
+      border-bottom: 2px solid var(--accent);
+      pointer-events: none;
+    }
+
+    #game {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 16px 20px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: 0.02em;
+    }
+
+    .target-box {
+      background: white;
+      border-radius: 18px;
+      padding: 18px 28px;
+      margin: 0 20px 12px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .target-label {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .target-chunk {
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--accent-dark);
+      line-height: 1.1;
+    }
+
+    .lane {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+
+    .card {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: -240px;
+      background: white;
+      border-radius: 16px;
+      padding: 14px 22px;
+      font-size: 32px;
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      white-space: nowrap;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+      user-select: none;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .card:active { transform: translateY(-50%) scale(0.96); }
+    .card.hit { background: var(--success); color: white; box-shadow: 0 0 0 4px rgba(123,193,126,0.3); }
+    .card .chunk-highlight { color: var(--accent-dark); }
+
+    .controls {
+      padding: 12px 20px 24px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 14px 22px;
+      font-size: 16px;
+      font-weight: 700;
+      background: var(--accent);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(45,156,219,0.25);
+    }
+
+    button.secondary { background: #e0e0e0; color: var(--text); box-shadow: none; }
+    button:disabled { opacity: 0.5; }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(247,244,236,0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      z-index: 10;
+    }
+
+    .overlay h1 { font-size: 28px; margin: 0 0 12px; }
+    .overlay p { font-size: 16px; max-width: 320px; line-height: 1.5; margin: 0 0 24px; color: #444; }
+    .overlay .summary { font-size: 18px; margin-bottom: 24px; }
+
+    .settings {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .accessibility-toggle {
+      font-size: 14px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: white;
+      border: 2px solid var(--accent);
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+
+    .accessibility-toggle.active { background: var(--accent); color: white; }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div id="game">
+    <header>
+      <span>Chunk Racer</span>
+      <span id="timer">60s</span>
+    </header>
+
+    <div class="target-box">
+      <div class="target-label">Tap words with this chunk</div>
+      <div class="target-chunk" id="targetChunk">—</div>
+    </div>
+
+    <div class="lane" id="lane">
+      <div class="ruler"></div>
+    </div>
+
+    <div class="controls">
+      <button id="ttsBtn" class="secondary">Read word</button>
+      <button id="startBtn">Start</button>
+    </div>
+  </div>
+
+  <div id="intro" class="overlay">
+    <h1>Chunk Racer</h1>
+    <p>Race by spotting the target chunk inside words. Tap a word when it matches. No red X's — just keep racing.</p>
+    <div class="settings">
+      <button class="accessibility-toggle active" id="dyslexiaFont">Dyslexia font</button>
+      <button class="accessibility-toggle active" id="offWhiteBg">Off-white</button>
+    </div>
+    <button id="startOverlayBtn">Start 60s Race</button>
+  </div>
+
+  <div id="end" class="overlay hidden">
+    <h1>Race complete!</h1>
+    <div class="summary" id="summary"></div>
+    <p>Misses don't reset your streak. They just mean the chunk will come back later.</p>
+    <button id="restartBtn">Race again</button>
+  </div>
+
+  <script>
+    // === Embedded sample content pack (Chunk Racer basics) ===
+    const PACK = [
+      { itemId: 'cr-001', skillId: 'decode-cvc', difficultyBand: 1, word: 'cat', chunk: 'at', distractors: ['it', 'ot'] },
+      { itemId: 'cr-002', skillId: 'decode-cvc', difficultyBand: 1, word: 'dog', chunk: 'og', distractors: ['ag', 'ig'] },
+      { itemId: 'cr-003', skillId: 'decode-cvc', difficultyBand: 1, word: 'sun', chunk: 'un', distractors: ['an', 'in'] },
+      { itemId: 'cr-004', skillId: 'decode-cvc', difficultyBand: 2, word: 'fish', chunk: 'ish', distractors: ['ash', 'ush'] },
+      { itemId: 'cr-005', skillId: 'decode-digraphs-blends', difficultyBand: 2, word: 'ship', chunk: 'ip', distractors: ['op', 'ap'] },
+      { itemId: 'cr-006', skillId: 'decode-digraphs-blends', difficultyBand: 3, word: 'frog', chunk: 'og', distractors: ['ig', 'ag'] },
+      { itemId: 'cr-007', skillId: 'sight-words-short', difficultyBand: 3, word: 'the', chunk: 'the', distractors: ['they', 'then'] },
+      { itemId: 'cr-008', skillId: 'sight-words-short', difficultyBand: 3, word: 'and', chunk: 'and', distractors: ['end', 'ant'] },
+      { itemId: 'cr-009', skillId: 'multisyllable-chunking', difficultyBand: 4, word: 'rabbit', chunk: 'rab', distractors: ['rib', 'rob'] },
+      { itemId: 'cr-010', skillId: 'multisyllable-chunking', difficultyBand: 4, word: 'butter', chunk: 'but', distractors: ['bat', 'bit'] },
+      { itemId: 'cr-011', skillId: 'fluency-target-wpm', difficultyBand: 5, word: 'swimming', chunk: 'swim', distractors: ['swam', 'swim'] },
+      { itemId: 'cr-012', skillId: 'fluency-target-wpm', difficultyBand: 5, word: 'lunchbox', chunk: 'lunch', distractors: ['launch', 'lunch'] }
+    ];
+
+    const DIFFICULTY = { 1: 1200, 2: 1100, 3: 1000, 4: 900, 5: 800 }; // ms per card spawn
+    const BASE_SPEED = 2.6; // px per frame at 60fps
+
+    const state = {
+      running: false,
+      score: 0,
+      hits: 0,
+      misses: 0,
+      streak: 0,
+      maxStreak: 0,
+      timeLeft: 60,
+      target: null,
+      cards: [],
+      spawnTimer: null,
+      gameTimer: null,
+      animationFrame: null,
+      lastSpawn: 0,
+      paceMultiplier: 1.0
+    };
+
+    const lane = document.getElementById('lane');
+    const targetEl = document.getElementById('targetChunk');
+    const timerEl = document.getElementById('timer');
+    const startBtn = document.getElementById('startBtn');
+    const ttsBtn = document.getElementById('ttsBtn');
+    const intro = document.getElementById('intro');
+    const endOverlay = document.getElementById('end');
+    const summaryEl = document.getElementById('summary');
+    const dyslexiaToggle = document.getElementById('dyslexiaFont');
+    const offWhiteToggle = document.getElementById('offWhiteBg');
+
+    let speech = window.speechSynthesis;
+
+    function applyAccessibility() {
+      document.body.style.fontFamily = dyslexiaToggle.classList.contains('active')
+        ? "'Comic Sans MS', 'OpenDyslexic', system-ui, sans-serif"
+        : "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+      document.body.style.background = offWhiteToggle.classList.contains('active') ? 'var(--bg)' : '#ffffff';
+    }
+
+    dyslexiaToggle.addEventListener('click', () => { dyslexiaToggle.classList.toggle('active'); applyAccessibility(); });
+    offWhiteToggle.addEventListener('click', () => { offWhiteToggle.classList.toggle('active'); applyAccessibility(); });
+    applyAccessibility();
+
+    function pickTarget() {
+      const item = PACK[Math.floor(Math.random() * PACK.length)];
+      state.target = item;
+      targetEl.textContent = item.chunk.toUpperCase();
+      speak(item.chunk);
+    }
+
+    function speak(text) {
+      if (!speech) return;
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate = 0.85;
+      u.pitch = 1.05;
+      speech.speak(u);
+    }
+
+    ttsBtn.addEventListener('click', () => {
+      if (state.target) speak(state.target.word);
+    });
+
+    function createCard() {
+      const isTarget = Math.random() < 0.55;
+      let item;
+      if (isTarget) {
+        item = state.target;
+      } else {
+        const pool = PACK.filter(i => i.chunk !== state.target.chunk);
+        item = pool[Math.floor(Math.random() * pool.length)];
+      }
+
+      const el = document.createElement('div');
+      el.className = 'card';
+      el.textContent = item.word;
+      el.dataset.chunk = item.chunk;
+      el.dataset.targetChunk = state.target.chunk;
+      el.dataset.word = item.word;
+      el.style.right = '-240px';
+      el.addEventListener('pointerdown', onCardTap);
+      lane.appendChild(el);
+
+      state.cards.push({
+        el,
+        x: window.innerWidth + 40,
+        speed: BASE_SPEED * state.paceMultiplier * (0.9 + Math.random() * 0.25),
+        word: item.word,
+        chunk: item.chunk
+      });
+    }
+
+    function onCardTap(e) {
+      if (!state.running) return;
+      const card = e.target;
+      const word = card.dataset.word;
+      const chunk = card.dataset.chunk;
+      const targetChunk = card.dataset.targetChunk;
+
+      if (chunk === targetChunk) {
+        card.classList.add('hit');
+        state.score += 10 + state.streak;
+        state.hits++;
+        state.streak++;
+        if (state.streak > state.maxStreak) state.maxStreak = state.streak;
+        // Adaptive: slightly speed up on success
+        state.paceMultiplier = Math.min(1.5, state.paceMultiplier + 0.03);
+        speak(word);
+        haptic();
+        setTimeout(() => card.remove(), 220);
+      } else {
+        // Failure is invisible: card keeps moving, streak doesn't reset
+        state.misses++;
+        state.streak = 0; // forgiving streak: resets only on miss, no penalty display
+        speak('try ' + word);
+      }
+    }
+
+    function haptic() {
+      if (navigator.vibrate) navigator.vibrate(12);
+    }
+
+    function updateLoop(timestamp) {
+      if (!state.running) return;
+
+      const dt = timestamp - state.lastSpawn;
+      const spawnInterval = (DIFFICULTY[state.target.difficultyBand] || 1000) / state.paceMultiplier;
+      if (dt > spawnInterval) {
+        createCard();
+        state.lastSpawn = timestamp;
+      }
+
+      const width = window.innerWidth;
+      for (let i = state.cards.length - 1; i >= 0; i--) {
+        const c = state.cards[i];
+        c.x -= c.speed;
+        c.el.style.transform = `translate(${c.x - width}px, -50%)`;
+        if (c.x < -220) {
+          c.el.remove();
+          state.cards.splice(i, 1);
+        }
+      }
+
+      state.animationFrame = requestAnimationFrame(updateLoop);
+    }
+
+    function startGame() {
+      // reset
+      state.score = 0;
+      state.hits = 0;
+      state.misses = 0;
+      state.streak = 0;
+      state.maxStreak = 0;
+      state.timeLeft = 60;
+      state.paceMultiplier = 1.0;
+      state.cards.forEach(c => c.el.remove());
+      state.cards = [];
+      state.running = true;
+      intro.classList.add('hidden');
+      endOverlay.classList.add('hidden');
+      startBtn.textContent = 'Running…';
+      startBtn.disabled = true;
+      timerEl.textContent = '60s';
+
+      pickTarget();
+      state.lastSpawn = performance.now();
+      state.animationFrame = requestAnimationFrame(updateLoop);
+
+      state.gameTimer = setInterval(() => {
+        state.timeLeft--;
+        timerEl.textContent = state.timeLeft + 's';
+        if (state.timeLeft <= 0) endGame();
+      }, 1000);
+    }
+
+    function endGame() {
+      state.running = false;
+      clearInterval(state.gameTimer);
+      cancelAnimationFrame(state.animationFrame);
+      startBtn.textContent = 'Start';
+      startBtn.disabled = false;
+      summaryEl.innerHTML = `
+        <strong>${state.hits}</strong> matches<br>
+        Best streak: <strong>${state.maxStreak}</strong><br>
+        Score: <strong>${state.score}</strong>
+      `;
+      endOverlay.classList.remove('hidden');
+    }
+
+    startBtn.addEventListener('click', startGame);
+    document.getElementById('startOverlayBtn').addEventListener('click', startGame);
+    document.getElementById('restartBtn').addEventListener('click', startGame);
+  </script>
+</body>
+</html>

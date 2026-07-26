@@ -1,0 +1,42 @@
+name: ChunkRacer
+options:
+  bundleIdPrefix: AvaResearchLLC
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+
+packages:
+  DecoderCore:
+    path: .
+
+targets:
+  ChunkRacer:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: ChunkRacerApp          # Swift sources + Resources/*.json (bundled)
+    dependencies:
+      - package: DecoderCore
+        product: DecoderCore
+    settings:
+      base:
+        PRODUCT_NAME: ChunkRacer
+        PRODUCT_BUNDLE_IDENTIFIER: AvaResearchLLC.ChunkRacer
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        TARGETED_DEVICE_FAMILY: "1"    # iPhone only for now (iPad later, build doc §8.2)
+        SWIFT_VERSION: "5.0"
+        DEVELOPMENT_TEAM: "2AZDH7DUYZ"
+        CODE_SIGN_STYLE: Automatic
+    postBuildScripts:
+      - name: Strip xattrs before codesign
+        script: /usr/bin/xattr -cr "${CODESIGNING_FOLDER_PATH}" || true
+        basedOnDependencyAnalysis: false
+    info:
+      path: ChunkRacerApp/Info.plist
+      properties:
+        CFBundleDisplayName: Chunk Racer
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait

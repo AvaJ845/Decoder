@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Swift / SPM
+app/.build/
+app/.swiftpm/
+
+# Generated Xcode project — regenerate with `xcodegen generate` from app/project.yml
+app/ChunkRacer*.xcodeproj/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+
+# Xcode user state
+xcuserdata/
+*.xcuserstate
+
+# Python
+__pycache__/
+*.pyc

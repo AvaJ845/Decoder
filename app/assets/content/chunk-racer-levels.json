@@ -1,0 +1,103 @@
+{
+  "title": "Chunk Racer Sample Level Progression",
+  "description": "Five levels demonstrating how the adaptive engine and skill graph translate into short, focused play sessions. Each level targets one or two skill nodes and is 60–90 seconds long.",
+  "levels": [
+    {
+      "levelId": "cr-level-01",
+      "name": "Warm-Up Lane",
+      "skillIds": ["decode-cvc"],
+      "difficultyBands": [1],
+      "durationSeconds": 60,
+      "targetStreak": 3,
+      "mechanics": {
+        "speed": "slow",
+        "cardSpawnMs": 1400,
+        "distractorCount": 2,
+        "tts": true,
+        "haptic": true
+      },
+      "itemPool": [
+        "cat", "dog", "sun", "bed", "pig", "mop", "run", "hen", "bus", "fox"
+      ],
+      "outro": "Great start! You spotted short vowel chunks."
+    },
+    {
+      "levelId": "cr-level-02",
+      "name": "Blend Boulevard",
+      "skillIds": ["decode-cvc", "decode-digraphs-blends"],
+      "difficultyBands": [1, 2],
+      "durationSeconds": 75,
+      "targetStreak": 4,
+      "mechanics": {
+        "speed": "medium-slow",
+        "cardSpawnMs": 1200,
+        "distractorCount": 2,
+        "tts": true,
+        "haptic": true
+      },
+      "itemPool": [
+        "fish", "ship", "flag", "frog", "swim", "trap", "stop", "skate",
+        "cat", "dog", "sun", "bed"
+      ],
+      "outro": "Blends and digraphs are tough. You kept the pace."
+    },
+    {
+      "levelId": "cr-level-03",
+      "name": "Sight-Word Speedway",
+      "skillIds": ["sight-words-short"],
+      "difficultyBands": [3],
+      "durationSeconds": 60,
+      "targetStreak": 5,
+      "mechanics": {
+        "speed": "medium",
+        "cardSpawnMs": 1000,
+        "distractorCount": 2,
+        "tts": true,
+        "haptic": true
+      },
+      "itemPool": [
+        "the", "and", "is", "you", "was", "for", "are", "with"
+      ],
+      "outro": "Sight words are all about speed. Nice work!"
+    },
+    {
+      "levelId": "cr-level-04",
+      "name": "Chunk Highway",
+      "skillIds": ["multisyllable-chunking"],
+      "difficultyBands": [4],
+      "durationSeconds": 90,
+      "targetStreak": 4,
+      "mechanics": {
+        "speed": "medium",
+        "cardSpawnMs": 1100,
+        "distractorCount": 2,
+        "tts": true,
+        "haptic": true
+      },
+      "itemPool": [
+        "rabbit", "butter", "napkin", "picnic", "sunset", "laptop", "dishes", "pencil"
+      ],
+      "outro": "Big words are just small chunks glued together."
+    },
+    {
+      "levelId": "cr-level-05",
+      "name": "Fluency Freeway",
+      "skillIds": ["fluency-target-wpm", "multisyllable-chunking"],
+      "difficultyBands": [3, 4, 5],
+      "durationSeconds": 90,
+      "targetStreak": 6,
+      "mechanics": {
+        "speed": "fast",
+        "cardSpawnMs": 850,
+        "distractorCount": 3,
+        "tts": true,
+        "haptic": true
+      },
+      "itemPool": [
+        "swimming", "lunchbox", "backpack", "playground", "sunshine", "basketball", "snowflake", "spaceship",
+        "the", "and", "rabbit", "fish"
+      ],
+      "outro": "You raced through real words like a pro."
+    }
+  ]
+}
