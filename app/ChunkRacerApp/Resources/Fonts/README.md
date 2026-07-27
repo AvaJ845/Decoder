@@ -4,33 +4,25 @@ Drop the **licensed** font files here. The app registers them automatically at l
 
 ## Required files (must match `Info.plist` UIAppFonts)
 
-| Font | File(s) | Role | Source / License |
+| Font | File(s) | Role | Notes |
 |---|---|---|---|
-| **Fredoka One** | `FredokaOne-Regular.ttf` (or `.otf` / variable) | Display type: titles, buttons, celebration | Confirm iOS-embedding license |
-| **OpenDyslexic** | `OpenDyslexic-Regular.otf` + `OpenDyslexic-Bold.otf` | Reading type default | Confirm iOS-embedding license |
-| **Lexend Deca** | `LexendDeca-Regular.ttf` (+ weights if available) | Reading type fallback | Confirm iOS-embedding license |
+| **Lexend Deca** | `LexendDeca-Regular.ttf` (+ weights if available) | **Reading default** | Locked default (D19) |
+| **OpenDyslexic** | `OpenDyslexic-Regular.otf` + `OpenDyslexic-Bold.otf` | Reading — user-switchable | Not the default; still ship it |
+| **Fredoka One** | `FredokaOne-Regular.ttf` (or `.otf` / variable) | Display: titles, buttons, celebration | Low risk |
 
-## ⚠️ The silent-failure gotcha: internal name, not filename
+See `docs/font-default-decision.md` for why Lexend is default.
 
-The app looks fonts up by their **internal PostScript / family name**, via
-`UIFont(name:)`, using these exact strings (from `DesignTokens.TypeRole`):
-`Fredoka One`, `OpenDyslexic`, `Lexend Deca`. **The *filename* does not matter for the
-lookup — the font's *internal* name does.** If a file's internal name differs even
-slightly (e.g. `OpenDyslexicAlta`, `Open Dyslexic`, `Fredoka-Regular`), the app will
-**silently fall back to the system font** and it will look like the drop did nothing.
+## Who sources
 
-To check a file's real name on macOS: `mdls -name com_apple_ats_name_postscript <file>`
-(or open it in Font Book). **If the internal names differ from the three strings above,
-tell the Fellow the actual names and we'll update `DesignTokens.TypeRole` to match** —
-don't rename the files to compensate.
+**DJ / project owner** obtains the licensed files (or designates a vendor). Confirm each license permits embedding in a shipping iOS app. If PostScript / internal names differ from the strings above, tell DE-App so `DesignTokens` and `FontManager` match.
 
-## Why this is the #1 blocker
+## Why this matters for Playtest #1
 
-These files are **licensed fonts**, not programmatically fetchable. Until they land in this folder, the app falls back to the system rounded font. The Dynamic Type and font-switching infrastructure is already in place; once these files are present (with matching internal names), the app will use them automatically.
+Fonts are the one art-adjacent dependency that affects the playtest's **legibility** signal. Placeholders for Arlo/kart are fine for the playtest; missing reading fonts are not ideal. Until files land, the app falls back to the system rounded font (Dynamic Type still scales).
 
 ## Before you commit
 
 - [ ] Every font file has a confirmed license permitting embedding in a shipping iOS app.
 - [ ] Filenames match the `UIAppFonts` array in `app/ChunkRacerApp/Info.plist` (or update `Info.plist` to match).
-- [ ] Run `assets/code/contrast_audit.py` after the drop to confirm reading text still passes AA on all four tints + dark mode.
-- [ ] Verify the app builds and Dynamic Type still scales in Settings → Accessibility.
+- [ ] Run `assets/code/contrast_audit.py` after the drop.
+- [ ] Verify the app builds and Dynamic Type still scales; try Lexend vs OpenDyslexic in Reading settings.

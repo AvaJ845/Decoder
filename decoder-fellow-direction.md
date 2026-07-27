@@ -89,8 +89,13 @@ Gold, ~0.6s, a single clear focal point (not confetti everywhere) — delight th
 **D6 · 2026-07-26 · Near-zero onboarding; learn by doing.**
 No tutorial wall. The first item *is* the tutorial (direct manipulation). At most one line of guidance. Parent gate only where data/accounts are involved. Kids — especially ADHD kids — bounce off instruction screens.
 
-**D7 · 2026-07-26 · Typography roles locked.**
-Display = Fredoka One (titles/buttons/celebration). Reading = OpenDyslexic default, Lexend Deca fallback, user-switchable, spacing/line-height adjustable. Roles never bleed; reading type never animated.
+**D7 · 2026-07-26 · Typography roles locked.** ~~Reading = OpenDyslexic default, Lexend Deca fallback~~ → **amended by D19.** Display = Fredoka One. Roles never bleed; reading type never animated.
+
+**D19 · 2026-07-26 · Reading default = Lexend Deca; OpenDyslexic remains switchable (graphics lead + Fellow).**
+Research on OpenDyslexic is mixed; it can also read as clinical. Ship both faces; default to Lexend Deca; let Playtest #1 treat font preference as a variable. DJ sources licensed files into `app/ChunkRacerApp/Resources/Fonts/`. See `docs/font-default-decision.md`.
+
+**D20 · 2026-07-26 · Arlo identity locked: BOOK (graphics lead).**
+Canonical Arlo is the book character (clean book-body, gold bookmark). The bear-in-kart concept is expression reference only — do not rig a bear. Book-Arlo must still hit bear-level warmth/readability of celebrate vs encourage; escalate before redesign if expression fails. See `docs/arlo-identity-decision.md`. Parallax environment remains cut (calm / ADHD).
 
 **D8 · 2026-07-26 · Full dark-mode + all four bg tints are launch-required, designed (not inverted).**
 Many dyslexic readers need a specific ground; parity is not optional.
@@ -160,15 +165,11 @@ Review verdicts: **Ship** / **Ship with notes** / **Rework** (with the specific 
 - After playtest #1: implement **StoreKit 2 monetization** (D12 + **D13**): subscription groups, trial, restore, Family Sharing — but the **paywall never gates the child's core reading practice** (D13.2). Build the **access/scholarship path as a launch feature** (D13.1, this leads). Scope any lifetime tier to the flagship only (D13.4). Confirm the **Kids Category vs Education** decision before starting (D13.5).
 
 **DE-Art**
-- **Chunk Racer mockup-2 production art** — follow the brief in `Required DE-Art illustration/chunk-racer-de-art-brief.md`. Priority order:
-  1. Final logo `brand_chunk_racer_logo`.
-  2. Arlo kart rig: idle / celebrate / encourage + dust puffs.
-  3. Environment parallax tiles: road, hills, trees, clouds.
-  4. UI buttons: pause, sound, skip; vertical reading ruler; "Find the chunk!" pill.
-- **Isolated, transparent Arlo sprites** (D11) for the hub/guide pose (idle/celebrate/encourage) as well.
-- **Bundle the reading + display fonts** (D7) and confirm the reading surface honors Dynamic Type.
-- **Celebrate particle** (with static Reduce-Motion variant).
-- Everything to the art-bible §10 DoD before it's "done."
+- ✅ **Decisions locked (D19/D20):** Arlo = book; Lexend Deca reading default + OpenDyslexic switchable.
+- **Fonts first (playtest-relevant):** DJ sources licensed files → `app/ChunkRacerApp/Resources/Fonts/` (`docs/font-default-decision.md`).
+- **Chunk Racer Tier-1 ship art** on `art/chunk-racer-production` — follow `docs/de-art-asset-request.md` + `docs/arlo-identity-decision.md`. Priority: (1) book Arlo idle/celebrate/encourage/think; (2) book-Arlo in kart; (3) app icon; (4) feedback set; (5) reading ruler; (6) logo last.
+- **Do not build** parallax hills/trees/clouds/sky.
+- Everything to the art-bible §10 DoD before it's "done." Parallel to playtest recruitment; not protected against loop findings.
 
 I'll review each as it lands and keep this log current.
 
