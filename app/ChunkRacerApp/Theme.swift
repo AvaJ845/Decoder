@@ -2,8 +2,8 @@ import SwiftUI
 import DecoderCore
 
 /// Maps the platform-neutral DesignTokens (hex strings) to SwiftUI Colors, honoring
-/// light/dark. Reading type uses OpenDyslexic (bundled) with a Lexend Deca fallback;
-/// display type uses Fredoka One. Never style the reading role (art-bible §4).
+/// light/dark. Reading type uses Lexend Deca (bundled) with OpenDyslexic switchable;
+/// display type uses Fredoka. Never style the reading role (art-bible §4).
 extension Color {
     init(hex: String) {
         let s = hex.hasPrefix("#") ? String(hex.dropFirst()) : hex

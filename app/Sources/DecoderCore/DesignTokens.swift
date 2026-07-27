@@ -29,10 +29,11 @@ public enum DesignTokens {
     public static let momentumGreen = Swatch(light: "#8FBF5A", dark: "#A9D66B")
 
     /// Two type roles that never bleed into each other (art-bible §4).
-    /// Reading default is Lexend Deca (D19); OpenDyslexic remains user-switchable.
+    /// Values are **PostScript names** matching the bundled font files (D19).
+    /// Reading default is Lexend Deca; OpenDyslexic remains user-switchable.
     public enum TypeRole {
-        public static let display = "Fredoka One"          // titles, buttons, celebrations
-        public static let readingDefault = "Lexend Deca"   // the decoding surface (default)
-        public static let readingFallback = "OpenDyslexic" // user-switchable alternative
+        public static let display = "Fredoka-Regular"       // titles/buttons (Fredoka OFL; successor to Fredoka One)
+        public static let readingDefault = "LexendDeca-Regular"
+        public static let readingFallback = "OpenDyslexic-Regular"
     }
 }
