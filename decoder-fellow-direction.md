@@ -149,6 +149,14 @@ ADHD optimizes for immediate local novelty; cross-app navigate-to-spend destroys
 **D24 · 2026-07-26 · Focus Dojo body-doubling: dynamic companion, not static avatar (adopts Dr. Thorne, refined).**
 A looping static "training partner" avatar is ineffective and can distract from the text sprint. Replace with a **dynamic pace-companion that moves with the child's reading rhythm**; prefer **parent-present** body-doubling over child co-op (avoids kid-social + privacy complexity). Live co-op is a later, carefully-scoped option. Spec updated in `per-app.md`.
 
+**D25 · 2026-07-26 · Architecture review of the re-architecture memo — validate before we rebuild.**
+The re-arch memo correctly targets the three review risks, but the flagship is code-complete and about to be playtested; we do not re-architect the loop before the playtest tells us it's wrong. Verdicts:
+- **Reject Unity** (the memo's "Unity C# wrapper for 120Hz"). It contradicts the native SwiftUI+SpriteKit stack, bloats a small reading app by tens of MB, and breaks the "one platform, many small games sharing DecoderCore" thesis (a Swift package). Native (SpriteKit / CADisplayLink / AVAudioEngine) handles 120Hz rhythm fine. And **haptics never replace audio** — iPad has no haptic engine (D9), so audio/visual must carry every cue.
+- **AppGroup shared container is the right pattern for cross-app state — at app #2+, not now.** With one shipping app there is nothing to share; keep the file-based DecoderCore stores. When adopted, it's shared *file* storage with multi-process coordination (NSFileCoordinator / SQLite-WAL), not "shared memory, sub-millisecond thread-safe." Implements D23's global-passive when the suite grows.
+- **The rhythm decodable-*phrase* builder is the right home for the D21 bridge — as its own mode/surface, not a replacement of Chunk Racer's validated pick-the-word mechanic (D1).** No mechanic pivot before Playtest #1.
+- **No "failure haptic / lockout" scaffolding.** Fading + disabling the wrong choice and a "damp" wrong-haptic is a soft red-X — it marks the child's choice as failure, conflicting with no-shame (#1). The mashing concern is real and is exactly what Playtest #1 observes (decode-vs-guess, D21). Address it only if the playtest shows mashing, and without punishing the wrong choice (reward-correct haptic, yes; punish-wrong, no).
+- **How to proceed: build none of the three proposed workstreams yet.** Playtest first; it decides whether any of this is warranted.
+
 ---
 
 ## 5. How I review DE work
