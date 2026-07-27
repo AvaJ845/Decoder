@@ -289,4 +289,72 @@ final class DecoderCoreTests: XCTestCase {
         for _ in 0..<10 { m.miss() }          // ten misses in a row
         XCTAssertGreaterThanOrEqual(m.streak, 0, "streak must never go negative — there is no lose-state")
     }
+
+    // MARK: - RaceSession (the loop policy, now unit-testable)
+
+    private func makeSession() throws -> RaceSession {
+        let pack = try PackLoader.load(from: packURL())
+        return RaceSession(pack: pack, engine: SimpleAdaptiveEngine(), learner: LearnerProfile(displayName: "Test"))
+    }
+
+    func testSessionStartsWithAnItemAndChoices() throws {
+        let s = try makeSession()
+        XCTAssertNotNil(s.current)
+        XCTAssertFalse(s.isComplete)
+        XCTAssertTrue(s.choices.contains(s.current!.payload.correctWord))
+        XCTAssertEqual(s.solved, 0)
+    }
+
+    func testProgressAdvancesOnlyOnCorrect() throws {
+        let s = try makeSession()
+        // A wrong answer must NOT advance progress and must NOT clear the item.
+        let item = s.current!
+        let wrong = item.payload.distractorWords.first!
+        s.answer(wrong, promptShownAt: nil)
+        XCTAssertEqual(s.solved, 0, "a miss never advances progress")
+        XCTAssertFalse(s.cleared.contains(item.itemId), "a missed item stays uncleared → it returns later")
+        // A correct answer advances by exactly one.
+        s.advance()
+        let next = s.current!
+        s.answer(next.payload.correctWord, promptShownAt: nil)
+        XCTAssertEqual(s.solved, 1)
+        XCTAssertTrue(s.cleared.contains(next.itemId))
+    }
+
+    func testSessionCompletesWhenAllClearedAndSummaryReflectsIt() throws {
+        let s = try makeSession()
+        var guardCount = 0
+        while !s.isComplete && guardCount < 1000 {
+            s.answer(s.current!.payload.correctWord, promptShownAt: nil)
+            s.advance()
+            guardCount += 1
+        }
+        XCTAssertTrue(s.isComplete)
+        XCTAssertEqual(s.solved, s.total)
+        XCTAssertEqual(s.summary.correctAnswers, s.total)
+        XCTAssertEqual(s.summary.accuracy, 1.0, accuracy: 0.001)
+    }
+
+    func testRepeatedMissesNeverCompleteOrLose() throws {
+        let s = try makeSession()
+        for _ in 0..<30 {
+            let wrong = s.current!.payload.distractorWords.first!
+            s.answer(wrong, promptShownAt: nil)
+            s.advance()
+            XCTAssertFalse(s.isComplete, "misses must never complete the race")
+            XCTAssertNotNil(s.current, "there is always a next item — no dead end")
+        }
+        XCTAssertEqual(s.solved, 0, "no progress from misses, but also no lose-state")
+        XCTAssertGreaterThanOrEqual(s.momentum.streak, 0)
+    }
+
+    func testJustAnsweredItemIsDeferredFromTheVeryNextPick() throws {
+        let s = try makeSession()
+        let answered = s.current!
+        s.answer(answered.payload.distractorWords.first!, promptShownAt: nil)  // miss (stays uncleared)
+        s.advance()
+        // With items remaining, the just-answered item should not be re-served immediately.
+        XCTAssertNotEqual(s.current?.itemId, answered.itemId,
+                          "a missed item returns later, not back-to-back")
+    }
 }
