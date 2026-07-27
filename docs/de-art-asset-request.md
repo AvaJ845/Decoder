@@ -5,10 +5,10 @@
 (trims scope, adds the real blocker, resolves a character conflict).
 
 > **Send-over summary:** For **Playtest #1 we do NOT need more art** — the current
-> placeholders are fine; the playtest tests the loop, not the finish. This request is for
-> **ship-quality art after the playtest validates the loop.** Before you draw anything, two
-> decisions must be locked (§1). Then produce Tier 1 (§3). Do **not** build the parallax
-> environment (§4). Work on a branch (§6).
+> placeholders are fine; the playtest tests the loop, not the finish. **Decisions locked:**
+> Arlo = book (`docs/arlo-identity-decision.md`); reading default = Lexend Deca with
+> OpenDyslexic switchable (`docs/font-default-decision.md`). Then produce Tier 1 (§3).
+> Do **not** build the parallax environment (§4). Work on branch `art/chunk-racer-production`.
 
 ---
 
@@ -27,40 +27,44 @@ flag, arlo_smiley, logo, pause/sound/skip buttons, track scenery) + two AI conce
 
 ---
 
-## 1. TWO decisions to lock BEFORE drawing (these gate everything)
+## 1. TWO decisions — **LOCKED** (2026-07-26, graphics lead)
 
-### 1a. 🔴 Arlo's identity: **book or bear?** (conflict — must resolve)
-The art bible's **canonical Arlo is a book character** (the "clean book-body Arlo," gold
-bookmark — the one in the gentle-reserve art). But `arlo_kart_hero.png` is a **teal bear**.
-**These are two different characters.** Rigging the wrong one wastes the most expensive art.
+### 1a. ✅ Arlo's identity: **BOOK** (locked)
+**Canonical Arlo is the book character** (clean book-body, gold bookmark, no cape).  
+The teal bear in `arlo_kart_hero.png` is **expression / kart-energy reference only** — do not rig a bear.
 
-- **Fellow's lean: keep Arlo the *book*.** It's more distinctive (every kids' app has an
-  animal mascot; a reading buddy that *is* a book is ownable and on-theme), and it's already
-  the canonical decision. The bear is warmer/cuter but generic and disconnected from reading.
-- **But this is the graphics lead's call** (they own canonical character). Whichever wins,
-  **lock it now and rig only that one.** Do not produce both.
+Full rationale + expressive-rig requirements: **`docs/arlo-identity-decision.md`**.
 
-### 1b. 🔴 Fonts — the actual blocker (NOT illustration)
-The #1 thing gating the accessibility finish is **licensed font files**, which are *not* in
-the folder and are *not* something you draw:
-- **OpenDyslexic** (Regular + Bold), **Lexend Deca**, **Fredoka One** → `.otf`/`.ttf` into
-  `app/ChunkRacerApp/Resources/Fonts/`. The code auto-loads them.
-- Confirm each license permits embedding in a shipping iOS app.
-- **Decide who sources these** (art lead? DJ?). Until they land, reading type falls back to
-  the system font. This is the single highest-value asset task.
+Produce only: `kit_guide_arlo_*` + `racer_kart_*` (book-Arlo in the go-kart).
+
+### 1b. ✅ Fonts — **Lexend Deca default**, OpenDyslexic switchable (locked)
+| Role | Font |
+|---|---|
+| Reading default | **Lexend Deca** |
+| Reading switchable | **OpenDyslexic** (Regular + Bold) |
+| Display | **Fredoka One** |
+
+Drop licensed `.otf`/`.ttf` into `app/ChunkRacerApp/Resources/Fonts/`.  
+**DJ / project owner sources the files.** Code defaults updated to Lexend Deca.  
+Playtest may still change the preferred default based on kid preference — do not treat OpenDyslexic as settled science.
+
+Full rationale: **`docs/font-default-decision.md`**.
 
 ---
 
 ## 2. Design guardrails that override the old brief
 
 - **Keep it CALM (deference + ADHD non-negotiable).** The old brief specced a multi-layer
-  **parallax environment** (hills + trees + clouds + sky scrolling). **Cut it.** A busy,
+  **parallax environment** (hills + trees + clouds + sky scrolling). **Cut it — stays cut.** A busy,
   animated, scrolling scene risks overstimulating exactly the kids we serve. The background
   stays quiet — a single near-static backdrop at most.
 - **Arlo-in-a-kart as the on-track racer is welcome** — one character is calm; a scrolling
-  scene is not. So: rich *character*, quiet *environment*.
+  scene is not. So: rich *character*, quiet *environment*. Book-Arlo sits in the kart.
 - **Reading text stays live-rendered** (D2) — never baked into art except the logo wordmark.
 - **Every asset meets the Definition of Done** (§5).
+- **Sequencing:** fonts may land before Playtest #1 (legibility). Rigged Arlo / kart / icon /
+  feedback are **ship-work parallel to recruitment** — playtest findings can still redirect them.
+  Do not protect Tier-1 art against loop changes.
 
 ---
 
@@ -116,6 +120,6 @@ Only one folder is actually compiled into the iOS app. Dropping art anywhere els
 
 ---
 
-*Net: nothing blocks the playtest. For ship — lock Arlo (book vs bear) and source the fonts
-first, produce Tier 1, keep the environment calm, hold the DoD. Small PRs on
-`art/chunk-racer-production`; I'll review each.*
+*Net: nothing blocks the playtest. Decisions locked (book Arlo; Lexend default). Source
+fonts; produce Tier 1; keep the environment calm; hold the DoD. Small PRs on
+`art/chunk-racer-production`; Fellow reviews each.*

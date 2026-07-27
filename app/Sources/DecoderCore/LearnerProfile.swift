@@ -1,7 +1,7 @@
 import Foundation
 
 /// Accessibility preferences for a learner. Defaults align with the art-bible:
-/// off-white ground, OpenDyslexic reading type, reading ruler on.
+/// off-white ground, Lexend Deca reading type (OpenDyslexic switchable), reading ruler on.
 public struct AccessibilityPrefs: Codable, Equatable {
     public var readingFontName: String
     public var displayFontName: String

@@ -29,9 +29,10 @@ public enum DesignTokens {
     public static let momentumGreen = Swatch(light: "#8FBF5A", dark: "#A9D66B")
 
     /// Two type roles that never bleed into each other (art-bible §4).
+    /// Reading default is Lexend Deca (D17); OpenDyslexic remains user-switchable.
     public enum TypeRole {
         public static let display = "Fredoka One"          // titles, buttons, celebrations
-        public static let readingDefault = "OpenDyslexic"  // the decoding surface
-        public static let readingFallback = "Lexend Deca"
+        public static let readingDefault = "Lexend Deca"   // the decoding surface (default)
+        public static let readingFallback = "OpenDyslexic" // user-switchable alternative
     }
 }

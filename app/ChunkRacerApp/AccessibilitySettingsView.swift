@@ -16,8 +16,8 @@ struct AccessibilitySettingsView: View {
                 Section("Reading font") {
                     Picker("Font", selection: $manager.profile.accessibility.readingFontName) {
                         Text("System").tag("System")
-                        Text("OpenDyslexic").tag(DesignTokens.TypeRole.readingDefault)
-                        Text("Lexend Deca").tag(DesignTokens.TypeRole.readingFallback)
+                        Text("Lexend Deca").tag(DesignTokens.TypeRole.readingDefault)
+                        Text("OpenDyslexic").tag(DesignTokens.TypeRole.readingFallback)
                     }
                     .pickerStyle(.segmented)
 

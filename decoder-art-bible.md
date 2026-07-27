@@ -85,7 +85,7 @@ Companion to: `decoder-build-doc.md` (architecture). Where the build doc says *w
   - [ ] Uses semantic / Dynamic Type sizing — never fixed point sizes baked into art.
 - [ ] Display type and reading type are visually distinct so kids never confuse "chrome" with "the thing to read."
 
-Record chosen fonts here: Display **`Fredoka One`** · Reading (default) **`OpenDyslexic`** (with `Lexend Deca` as a system humanist fallback)
+Record chosen fonts here: Display **`Fredoka One`** · Reading (default) **`Lexend Deca`** · Reading (switchable) **`OpenDyslexic`** (see D17 / `docs/font-default-decision.md`)
 
 ---
 
