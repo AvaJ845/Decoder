@@ -40,3 +40,10 @@ targets:
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
+        # Declared here (not hand-edited into Info.plist) so xcodegen regenerates it
+        # stably. FontManager also registers programmatically; this is belt-and-suspenders.
+        UIAppFonts:
+          - LexendDeca-Regular.ttf
+          - OpenDyslexic-Regular.otf
+          - OpenDyslexic-Bold.otf
+          - FredokaOne-Regular.ttf

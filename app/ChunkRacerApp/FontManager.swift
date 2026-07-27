@@ -13,7 +13,7 @@ final class FontManager: ObservableObject {
         self.profile = profile
     }
 
-    /// Display type: Fredoka One (titles, buttons, celebrations).
+    /// Display type: Fredoka (titles, buttons, celebrations).
     /// Falls back to system rounded if the bundled font is missing.
     func display(size: CGFloat, weight: Font.Weight = .bold) -> Font {
         let prefs = profile.accessibility
@@ -26,7 +26,7 @@ final class FontManager: ObservableObject {
         return .system(textStyleFor(size: size), design: .rounded).weight(weight)
     }
 
-    /// Reading type: OpenDyslexic or Lexend Deca, user-switchable.
+    /// Reading type: Lexend Deca default; OpenDyslexic user-switchable (D19).
     /// Scales with Dynamic Type and honors letter spacing / line height.
     func reading(size: CGFloat, weight: Font.Weight = .regular) -> Font {
         let prefs = profile.accessibility
@@ -52,10 +52,27 @@ final class FontManager: ObservableObject {
     }
 
     /// Register bundled fonts at launch. Call once from the app entry point.
+    /// Looks in `Fonts/` first, then bundle root (XcodeGen may flatten Resources).
     static func registerBundledFonts() {
-        guard let urls = Bundle.main.urls(forResourcesWithExtension: "ttf", subdirectory: "Fonts")
-            ?? Bundle.main.urls(forResourcesWithExtension: "otf", subdirectory: "Fonts") else {
-            return
+        let known: [(String, String)] = [
+            ("LexendDeca-Regular", "ttf"),
+            ("OpenDyslexic-Regular", "otf"),
+            ("OpenDyslexic-Bold", "otf"),
+            ("FredokaOne-Regular", "ttf"),
+        ]
+        var seen = Set<URL>()
+        var urls: [URL] = []
+        for ext in ["ttf", "otf"] {
+            for url in Bundle.main.urls(forResourcesWithExtension: ext, subdirectory: "Fonts") ?? [] {
+                if seen.insert(url).inserted { urls.append(url) }
+            }
+        }
+        for (name, ext) in known {
+            if let url = Bundle.main.url(forResource: name, withExtension: ext, subdirectory: "Fonts")
+                ?? Bundle.main.url(forResource: name, withExtension: ext),
+               seen.insert(url).inserted {
+                urls.append(url)
+            }
         }
         for url in urls {
             var error: Unmanaged<CFError>?
