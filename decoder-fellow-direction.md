@@ -157,6 +157,9 @@ The re-arch memo correctly targets the three review risks, but the flagship is c
 - **No "failure haptic / lockout" scaffolding.** Fading + disabling the wrong choice and a "damp" wrong-haptic is a soft red-X — it marks the child's choice as failure, conflicting with no-shame (#1). The mashing concern is real and is exactly what Playtest #1 observes (decode-vs-guess, D21). Address it only if the playtest shows mashing, and without punishing the wrong choice (reward-correct haptic, yes; punish-wrong, no).
 - **How to proceed: build none of the three proposed workstreams yet.** Playtest first; it decides whether any of this is warranted.
 
+**D26 · 2026-07-27 · Security posture: privacy by architecture (Fellow security review).**
+Full audit found no critical/high issues. Controls are structural: no network calls, no third-party code, no PII collected (no name/email/DOB/location/device-id), minimal on-device data now **encrypted at rest** (`completeFileProtectionUntilFirstUserAuthentication`), no sensitive permissions, no risky APIs, no secrets in the repo. App Store privacy label = **"Data Not Collected."** Forward-looking gates (not current issues): real-name entry → PII/COPPA handling; OTA content → authenticate source + guard `AssetKeyResolver` path traversal; accounts/purchases → real parent gate (access-first, D13). Full write-up in `SECURITY.md`.
+
 ---
 
 ## 5. How I review DE work
