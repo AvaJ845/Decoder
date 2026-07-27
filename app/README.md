@@ -23,10 +23,18 @@ app/
 │   ├── ChunkRacerApp.swift       # @main App shell
 │   ├── ContentView.swift         # Sprint 0 exit screen
 │   ├── Theme.swift               # DesignTokens → SwiftUI Color
-│   ├── Haptics.swift             # cue → Core Haptics (iPad-safe no-op)
-│   └── RhythmSpikeScene.swift    # SpriteKit rhythm/timing feasibility spike
-└── tools/keygen.py               # asset-key production queue for DE-Art
+│   └── Haptics.swift             # cue → Core Haptics (iPad-safe no-op)
+├── tools/keygen.py               # asset-key production queue for DE-Art
+└── tools/check-fixtures.sh       # guards the 3 content copies against drift
 ```
+
+## Content fixtures — one source, two consumers
+
+`chunk-racer-basics-pack.json` and `skill-graph.json` exist in three places by necessity
+(different bundling systems): **`assets/code/` is the source of truth**; the app bundles
+its copy in `ChunkRacerApp/Resources/`; the tests use `Tests/DecoderCoreTests/Resources/`.
+After editing the source, re-copy to the other two and run `tools/check-fixtures.sh` — it
+fails if any copy has drifted (this bit us once).
 
 ## Build & test the core (headless — runs here)
 
@@ -49,7 +57,7 @@ UIKit/SwiftUI/SpriteKit/CoreHaptics):
 2. Add this folder as a local Swift Package dependency (`DecoderCore`).
 3. Add the `ChunkRacerApp/` files to the target.
 4. Bundle `assets/code/chunk-racer-basics-pack.json` and `assets/code/skill-graph.json`.
-5. Run on device to exercise `Haptics` and `RhythmSpikeScene` (the timing spike).
+5. Run on device to exercise `Haptics` (Core Haptics on iPhone).
 
 ## Asset production queue
 
