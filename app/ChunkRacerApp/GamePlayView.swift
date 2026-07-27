@@ -53,10 +53,11 @@ struct GamePlayView: View {
             }
         }
         .sheet(isPresented: $showSettings) {
-            AccessibilitySettingsView(manager: model.fontManager) {
-                model.savePreferences()
-                showSettings = false
-            }
+            AccessibilitySettingsView(
+                manager: model.fontManager,
+                onSave: { model.savePreferences(); showSettings = false },
+                onStartFresh: { model.startFresh(); showSettings = false }
+            )
         }
     }
 
