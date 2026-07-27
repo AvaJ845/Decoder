@@ -54,8 +54,8 @@ Masters also live under `Required DE-Art illustration/kit_guide_arlo_*.png`.
 | `ui_button_skip` | `ChunkRacerApp/Resources/ui_button_skip.png` / `@2x` / `@3x` | Skip/forward button (mockup 2) | **placeholder** |
 | `ui_ruler_vertical` | `ChunkRacerApp/Resources/ui_ruler_vertical.png` / `@2x` / `@3x` | Vertical reading ruler | **production drop** |
 | `ui_pill_find_chunk` | `ui-kit/ui_pill_find_chunk.png` | "Find the chunk!" pill label | concept |
-| `brand_racer_logo` | `ChunkRacerApp/Resources/chunk_racer_logo.png` / `@2x` / `@3x` | Logo wordmark for splash / title | **produced** |
-| `brand_chunk_racer_logo` | `Required DE-Art illustration/chunk_racer_logo_concept.png` | Final logo concept with orange car | **concept** |
+| `brand_racer_logo` | `ChunkRacerApp/Resources/chunk_racer_logo.png` / `@2x` / `@3x` | Logo wordmark for splash / title (Fredoka + orange #7 car) | **production drop** |
+| `brand_chunk_racer_logo` | `Required DE-Art illustration/chunk_racer_logo_concept.png` (+ Resources scales) | Full wordmark master | **production drop** |
 
 **Next production step:** produce 9-slice PDF/SVG buttons and Lottie/Spine variants for the momentum meter and feedback states.
 
@@ -101,10 +101,12 @@ Masters also live under `Required DE-Art illustration/kit_guide_arlo_*.png`.
 | assetKey | Source file | Use | Status |
 |---|---|---|---|
 | `brand_decoder_icon` | `../design/decoder-series-icon.png` | Decoder series app icon | concept |
-| `brand_racer_icon` | `../ios/ChunkRacer/Assets.xcassets/AppIcon.appiconset/` | Chunk Racer iOS icon set | produced |
+| `brand_racer_icon` | `../ios/ChunkRacer/Assets.xcassets/AppIcon.appiconset/` (+ master `Required DE-Art illustration/brand_racer_icon_master.png`; Resources `brand_racer_icon` @1x/@2x/@3x preview) | Chunk Racer iOS icon — book-Arlo in kart on cream | **production drop** |
 | `brand_racer_launch` | `../ios/ChunkRacer/Assets.xcassets/LaunchScreen.imageset/launch-screen.png` | Chunk Racer launch screen | concept |
 | `brand_racer_hero` | `../ios/Marketing/app-store-hero.png` | App Store marketing banner | concept |
 | `brand_racer_master_style` | `style-frames/master-style-frame.png` | Master style frame for the whole series | concept |
+
+**Fellow note:** drag/update `AppIcon.appiconset` into the Xcode asset catalog (see `app/assets/ios/README.md`). Wordmark is already in the bundled `Resources/` folder.
 
 ---
 

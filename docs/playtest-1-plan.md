@@ -50,6 +50,7 @@ If any breaks, we stop and fix the loop — no art investment until it's fixed.
 | Time to first correct answer | seconds (rough) |
 | **Reaction to first miss** (shame scale) | 0 = shrugged & continued · 1 = paused · 2 = frustrated/looked away · 3 = shut down/upset |
 | Re-engaged after a miss? | Yes / No |
+| **Decoding or guessing?** (D21) | Did they sound out / find the chunk, or guess from word shape/first letter? Watch eyes + speed. Consistent guessing = the decodable-text bridge is needed before speed. |
 | Asked/tried to play again at the end? | Yes / No |
 | Legibility issues | anything hard to read (font, size, contrast) |
 | Overwhelm / calm | any signs the screen was too much (ADHD) |

@@ -62,10 +62,18 @@
       "apps": ["chunk-racer", "clue-hunt"]
     },
     {
+      "id": "read-decodable-text",
+      "name": "Read Connected Decodable Text",
+      "description": "Read short, controlled decodable sentences accurately BEFORE pushing recognition speed — the decoding→fluency bridge (D21, adopts Dr. Vance). Guards against training context-guessing over decoding.",
+      "prerequisites": ["decode-digraphs-blends", "sight-words-short"],
+      "masteryThreshold": 0.80,
+      "apps": ["chunk-racer"]
+    },
+    {
       "id": "fluency-target-wpm",
       "name": "Fluency at Target WPM",
       "description": "Read connected chunks with speed and accuracy",
-      "prerequisites": ["sight-words-short", "multisyllable-chunking"],
+      "prerequisites": ["read-decodable-text", "multisyllable-chunking"],
       "masteryThreshold": 0.80,
       "apps": ["chunk-racer"]
     }

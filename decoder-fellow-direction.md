@@ -137,6 +137,18 @@ Fellow review of the session-summary PR caught a no-shame violation: an accuracy
 **D18 · 2026-07-26 · Chunk Racer is code-complete for Playtest #1; remaining gates are DE-Art + recruiting, not code.**
 The loop is playable and accessible (VoiceOver, Dynamic Type, Reduce Motion, reading ruler, four tints, dark mode, AA-verified) and each session yields evidence. Placeholder art + system fonts are acceptable for the playtest (we test the loop, not the finish). Open items before running it: DE-Art font drop + Tier-1 art (see `docs/de-art-asset-request.md`) and recruiting (see `docs/playtest-1-recruiting-kit.md`). **Open art decision to lock before rigging: Arlo's identity — canonical *book* (art bible) vs the *bear* in `arlo_kart_hero.png`. Fellow leans book; graphics lead's final call.**
 
+**D21 · 2026-07-26 · Add a decodable-connected-text bridge between decoding and fluency (adopts Dr. Vance).**
+Structured literacy builds accuracy on connected, controlled *decodable text* before pushing recognition speed. The skill graph jumped from isolated decoding straight to speed — a real gap that risks Chunk Racer training *context-guessing* over decoding. Added skill node `read-decodable-text` (prereq for `fluency-target-wpm`); a decodable-readers mode/surface belongs between Sound Forge and Chunk Racer in the sequence. Flagship guardrail: pace is a dial not a threat (D3), and **Playtest #1 must explicitly observe decode-vs-guess** (added to the plan). This is the highest-priority pedagogy fix.
+
+**D22 · 2026-07-26 · Story Studio = structured, not open-ended (adopts Dr. Vance).**
+Encoding (writing) is far more taxing than decoding for this audience, so open-ended story remixing is the wrong primary motivator. Story Studio uses **structured sentence-combining frames + visual storyboarding + word-bank-constrained slots**, keeping TTS read-back. Spec updated in the suite skill (`per-app.md`).
+
+**D23 · 2026-07-26 · Reward economy: local-active, global-passive (adopts Dr. Thorne).**
+ADHD optimizes for immediate local novelty; cross-app navigate-to-spend destroys a token's value. Each app owns a **self-contained, immediate, high-velocity reward loop**; the shared Decoder Kit is a **passive, automated collection** that accrues in the background — never something you exit an app to spend. Refines the platform economy (build doc §4.1). Chunk Racer already does the local part (celebrate/streak/kart).
+
+**D24 · 2026-07-26 · Focus Dojo body-doubling: dynamic companion, not static avatar (adopts Dr. Thorne, refined).**
+A looping static "training partner" avatar is ineffective and can distract from the text sprint. Replace with a **dynamic pace-companion that moves with the child's reading rhythm**; prefer **parent-present** body-doubling over child co-op (avoids kid-social + privacy complexity). Live co-op is a later, carefully-scoped option. Spec updated in `per-app.md`.
+
 ---
 
 ## 5. How I review DE work

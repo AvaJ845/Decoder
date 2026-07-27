@@ -107,6 +107,7 @@ The whole series stands on **four shared services** plus a **content pipeline**.
 - **New content = new nodes/packs, no re-architecting.** (See §5.)
 
 **C. Reward Economy (Decoder Kit)** — one currency and one inventory of "tools."
+- **Local-active, global-passive (D23):** each app owns an immediate, self-contained, high-velocity reward loop; the shared inventory is a **passive, automated collection** that accrues in the background — never something a child exits an app to "spend." ADHD optimizes for immediate local novelty, so cross-app navigate-to-spend friction destroys a token's value.
 - Add a game later and it slots into the existing economy instead of inventing its own.
 - Tools are the cross-app strategies that form the moat.
 
