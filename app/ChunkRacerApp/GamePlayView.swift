@@ -165,9 +165,11 @@ struct GamePlayView: View {
                 .font(model.fontManager.display(size: 18, weight: .heavy))
                 .foregroundStyle(ink)
             if model.momentum.protectedCount > 0 {
-                Image(systemName: "shield.fill")
-                    .font(.system(size: 13, weight: .bold))
-                    .foregroundStyle(teal)
+                if let shield = BundleImage.image("ui_momentum_protected") {
+                    shield.resizable().scaledToFit().frame(width: 18, height: 18)
+                } else {
+                    Image(systemName: "shield.fill").font(.system(size: 13, weight: .bold)).foregroundStyle(teal)
+                }
             }
         }
         .padding(.horizontal, 12)
@@ -179,20 +181,26 @@ struct GamePlayView: View {
         .accessibilityValue("\(model.momentum.streak)" + (model.momentum.protectedCount > 0 ? ", protected" : ""))
     }
 
+    // Book-Arlo, reacting to the game state (celebrate on a hit, encourage on a miss).
     private var arloToken: some View {
-        if let img = BundleImage.image("arlo_smiley") {
-            return AnyView(img.resizable().scaledToFit().frame(width: 56, height: 56))
+        let key: String = switch model.arlo {
+            case .idle: "kit_guide_arlo_idle"
+            case .celebrate: "kit_guide_arlo_celebrate"
+            case .encourage: "kit_guide_arlo_encourage"
         }
-        // Fallback uses the darker teal so the white face stays AA-compliant.
-        return AnyView(
-            ZStack {
-                RoundedRectangle(cornerRadius: 16).fill(tealText)
-                Image(systemName: "face.smiling")
-                    .font(.system(size: 30, weight: .bold))
-                    .foregroundStyle(.white)
+        return Group {
+            if let img = BundleImage.image(key) {
+                img.resizable().scaledToFit()
+            } else {
+                // Fallback: darker teal tile so the white face stays AA-compliant.
+                ZStack {
+                    RoundedRectangle(cornerRadius: 16).fill(tealText)
+                    Image(systemName: "face.smiling").font(.system(size: 30, weight: .bold)).foregroundStyle(.white)
+                }
             }
-            .frame(width: 56, height: 56)
-        )
+        }
+        .frame(width: 62, height: 74)
+        .animation(reduceMotion ? .none : .spring(response: 0.35, dampingFraction: 0.7), value: model.arlo)
     }
 
     private var arloBar: some View {
@@ -294,7 +302,7 @@ private struct RaceTrack: View {
     var body: some View {
         GeometryReader { geo in
             let inset: CGFloat = 12
-            let racerW: CGFloat = 48
+            let racerW: CGFloat = 56
             let usable = max(0, geo.size.width - inset * 2 - racerW)
             // Scheme-aware so the track stays visible in dark mode (light ink on a
             // dark ground would vanish). Decorative, so kept subtle either way.
@@ -319,11 +327,11 @@ private struct RaceTrack: View {
                         .foregroundStyle(Color(hex: DesignTokens.ink.light).opacity(0.5))
                         .offset(x: geo.size.width - 28, y: 14)
                 }
-                // Car icon
-                if let car = BundleImage.image("racer_car") {
+                // Book-Arlo in the kart (the on-track racer).
+                if let car = BundleImage.image("racer_kart_idle") {
                     car.resizable().scaledToFit()
-                        .frame(width: racerW, height: 32)
-                        .offset(x: inset + usable * progress, y: 14)
+                        .frame(width: racerW, height: 48)
+                        .offset(x: inset + usable * progress, y: 2)
                         .animation(reduceMotion ? .none : .spring(response: 0.5, dampingFraction: 0.7), value: progress)
                 } else {
                     Racer()
@@ -423,20 +431,25 @@ private struct CelebrateBurst: View {
     var body: some View {
         ZStack {
             if reduceMotion {
-                Circle()
-                    .stroke(color, lineWidth: 5)
-                    .frame(width: animate ? 150 : 90, height: animate ? 150 : 90)
-                    .opacity(animate ? 0 : 0.9)
+                // Static-equivalent: the delivered reduce-motion sparkle, gently fading.
+                if let s = BundleImage.image("celebrate_sparkle_reducemotion") {
+                    s.resizable().scaledToFit().frame(width: 120, height: 120).opacity(animate ? 0 : 0.95)
+                } else {
+                    Circle().stroke(color, lineWidth: 5)
+                        .frame(width: animate ? 150 : 90, height: animate ? 150 : 90).opacity(animate ? 0 : 0.9)
+                }
+            } else if let s = BundleImage.image("celebrate_sparkle") {
+                // One focal sparkle: pop out and fade (D5 — brief, single focal point).
+                s.resizable().scaledToFit()
+                    .frame(width: 150, height: 150)
+                    .scaleEffect(animate ? 1.15 : 0.5)
+                    .opacity(animate ? 0 : 1)
             } else {
                 ForEach(0..<6, id: \.self) { i in
                     let angle = Double(i) / 6 * 2 * .pi
-                    Image(systemName: "star.fill")
-                        .font(.system(size: 20))
-                        .foregroundStyle(color)
-                        .offset(x: animate ? cos(angle) * 96 : 0,
-                                y: animate ? sin(angle) * 96 : 0)
-                        .opacity(animate ? 0 : 1)
-                        .scaleEffect(animate ? 0.4 : 1)
+                    Image(systemName: "star.fill").font(.system(size: 20)).foregroundStyle(color)
+                        .offset(x: animate ? cos(angle) * 96 : 0, y: animate ? sin(angle) * 96 : 0)
+                        .opacity(animate ? 0 : 1).scaleEffect(animate ? 0.4 : 1)
                 }
             }
         }
