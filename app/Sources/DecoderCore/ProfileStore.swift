@@ -48,6 +48,7 @@ public final class FileProfileStore: ProfileStore {
         var copy = profile
         copy.touch()
         let data = try encoder.encode(copy)
-        try data.write(to: url(for: profile.id), options: .atomic)
+        // Children's data at rest: encrypt on disk (available after first unlock).
+        try data.write(to: url(for: profile.id), options: [.atomic, .completeFileProtectionUntilFirstUserAuthentication])
     }
 }

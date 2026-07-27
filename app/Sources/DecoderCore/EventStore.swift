@@ -58,7 +58,8 @@ public final class FileEventStore: EventStore {
             try handle.seekToEnd()
             try handle.write(contentsOf: line)
         } else {
-            try line.write(to: url, options: .atomic)
+            // First write sets the file's protection class; appends inherit it.
+            try line.write(to: url, options: [.atomic, .completeFileProtectionUntilFirstUserAuthentication])
         }
     }
 
