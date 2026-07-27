@@ -6,7 +6,7 @@ Drop the **licensed** font files here. The app registers them automatically at l
 
 | Font | File(s) | Role | Notes |
 |---|---|---|---|
-| **Lexend Deca** | `LexendDeca-Regular.ttf` (+ weights if available) | **Reading default** | Locked default (D17) |
+| **Lexend Deca** | `LexendDeca-Regular.ttf` (+ weights if available) | **Reading default** | Locked default (D19) |
 | **OpenDyslexic** | `OpenDyslexic-Regular.otf` + `OpenDyslexic-Bold.otf` | Reading — user-switchable | Not the default; still ship it |
 | **Fredoka One** | `FredokaOne-Regular.ttf` (or `.otf` / variable) | Display: titles, buttons, celebration | Low risk |
 
