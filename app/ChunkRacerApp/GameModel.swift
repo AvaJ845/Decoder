@@ -15,9 +15,13 @@ final class GameModel: ObservableObject {
     enum ArloState { case idle, celebrate, encourage }
     enum Feedback: Equatable { case correct(String); case reserve(String) }
 
-    private let session: RaceSession
+    private var session: RaceSession
     private let profileStore: ProfileStore
     private let events: EventStore
+    private let engine: AdaptiveEngine
+
+    /// Fixed id so save/load agree — a single learner per device for now.
+    private static let learnerId = "demo"
 
     @Published var fontManager: FontManager
     @Published var learner: LearnerProfile
@@ -46,10 +50,13 @@ final class GameModel: ObservableObject {
          engine: AdaptiveEngine = SimpleAdaptiveEngine(),
          events: EventStore? = nil) {
         self.profileStore = profileStore
+        self.engine = engine
 
-        // Load or create a default learner, then hand it to the session (single source
-        // of truth for mastery + momentum + prefs).
-        let initialLearner = (try? profileStore.load(id: "demo")) ?? LearnerProfile(displayName: "Player")
+        // Load or create the learner under a FIXED id so save/load agree (mastery +
+        // momentum + prefs persist across launches). Hand it to the session (the single
+        // source of truth for those).
+        let initialLearner = (try? profileStore.load(id: GameModel.learnerId))
+            ?? LearnerProfile(id: GameModel.learnerId, displayName: "Player")
         self.session = RaceSession(pack: pack, engine: engine, learner: initialLearner)
 
         // File-backed event store by default so playtest sessions are reviewable;
@@ -103,6 +110,21 @@ final class GameModel: ObservableObject {
         learner = session.learner
         fontManager.profile = session.learner
         try? profileStore.save(session.learner)
+    }
+
+    /// Reset to a brand-new learner (fresh mastery, momentum, progress, and prefs).
+    /// For running back-to-back playtest sessions so each child starts clean — one
+    /// kid's progress must never carry into the next (playtest-1-plan / recruiting kit).
+    func startFresh() {
+        let fresh = LearnerProfile(id: GameModel.learnerId, displayName: "Player")
+        try? profileStore.save(fresh)
+        session = RaceSession(pack: session.pack, engine: engine, learner: fresh)
+        learner = session.learner
+        momentum = session.momentum
+        fontManager.profile = session.learner
+        solved = 0
+        burstToken += 1
+        syncPresentation()
     }
 
     // MARK: - Presentation mirroring

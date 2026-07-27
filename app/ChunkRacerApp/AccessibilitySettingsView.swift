@@ -7,6 +7,8 @@ struct AccessibilitySettingsView: View {
     @Environment(\.colorScheme) private var scheme
     @ObservedObject var manager: FontManager
     let onSave: () -> Void
+    var onStartFresh: () -> Void = {}
+    @State private var confirmFresh = false
 
     private var prefs: AccessibilityPrefs { manager.profile.accessibility }
 
@@ -51,6 +53,19 @@ struct AccessibilitySettingsView: View {
                     Toggle("Reading ruler", isOn: $manager.profile.accessibility.ruler)
                     Toggle("Text-to-speech", isOn: $manager.profile.accessibility.tts)
                     Toggle("Reduce motion", isOn: $manager.profile.accessibility.reduceMotion)
+                }
+
+                Section("New player") {
+                    Button(role: .destructive) { confirmFresh = true } label: {
+                        Label("Start fresh — new player", systemImage: "arrow.counterclockwise")
+                    }
+                    .confirmationDialog("Start fresh for a new player? This clears the current progress and settings.",
+                                        isPresented: $confirmFresh, titleVisibility: .visible) {
+                        Button("Start fresh", role: .destructive) { onStartFresh() }
+                        Button("Cancel", role: .cancel) {}
+                    }
+                    Text("Use between children in a playtest so each starts clean.")
+                        .font(.footnote).foregroundStyle(.secondary)
                 }
             }
             .navigationTitle("Reading settings")
